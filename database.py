@@ -15,7 +15,7 @@ class Database():
     def check_site(self, name):
         self.cur.execute("SELECT id FROM sites WHERE name=?", (name,))
         if len(self.cur.fetchall()) < 1:
-          return False
+            return False
         return True
 
     def insert_site(self, name, link):
@@ -32,6 +32,17 @@ class Database():
         self.cur.execute("INSERT INTO news (title, text, link, img_link, site_id) VALUES(?, ?, ?, ?, "
                          + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, site))
         self.con.commit()
+
+    def insert_channel(self, site, channel_id):
+        self.cur.execute("INSERT INTO channels (site_id, channel_id) VALUES ("
+                         + "(SELECT id FROM sites WHERE name=?), ?)", (site, channel_id))
+        self.con.commit()
+
+    def get_data(self, site_name):
+        self.cur.execute("SELECT s.link, c.channel_id FROM sites s INNER JOIN channels c ON s.id=c.site_id WHERE "
+                         + "s.name=?", (site_name,))
+        result = self.cur.fetchall()[:][0]
+        return result
 
     def __check_db(self, file):
         if not os.path.isfile(file):
