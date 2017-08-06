@@ -25,12 +25,19 @@ class News:
     def set_title(self, title):
         self.__title = self.__check(title)
 
+    def __create_hashtag(self, text):
+        text_list = re.split('[.:]', text, maxsplit=1)
+        tags = re.split('[\/-]', text_list[0])
+        tags = ['#' + tag.replace(' ', '') for tag in tags]
+        new_text = ' '.join(tags) + text_list[1]
+        for tag in tags:
+            if len(tag) > 20:
+                new_text = text
+        return new_text
+
     def set_text(self, text, hashtag=False):
         if hashtag:
-            text = re.split('[.:]', text, maxsplit=1)
-            tags = text[0].split('/').replace('-', ' ')
-            tags = ['#' + tag.replace(' ', '') for tag in tags]
-            text = ' '.join(tags) + text[1]
+            text = self.__create_hashtag(text)
         self.__text = self.__check(text)
 
     def set_link(self, link):
@@ -41,14 +48,16 @@ class News:
 
     def __insert_db(self):
         db = database.Database()
-        if not db.check_news(self.__title):
+        if not db.check_news(self.__link):
             db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
-        self.__url, self.__channel = db.get_data(self.__site)
+            self.__url, self.__channel = db.get_data(self.__site)
+            return True
+        return False
 
     def __send(self):
         tg = telegrambot.telegram()
         tg.send_news(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel)
 
     def post(self):
-        self.__insert_db()
-        self.__send()
+        if self.__insert_db():
+            self.__send()

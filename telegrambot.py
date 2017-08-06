@@ -13,4 +13,4 @@ class telegram():
         msg = '*' + title + '*\n\n' + text[:-1] + '[.](' + img + ')'
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel anzeigen', url=link)]])
         self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
-        time.sleep(10)
+        time.sleep(5)

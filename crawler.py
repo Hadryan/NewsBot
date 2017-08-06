@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import requests
+from urllib.request import urlopen
 import news
 import database
 
@@ -21,9 +21,9 @@ def main():
 def get_data(base_url):
     data_list = []
     url = base_url + 'index.php?site='
-    sites = ['news-direkt', 'newsaw-direkt', 'newsregio-direkt']
+    sites = ['newsregio-direkt', 'newsaw-direkt', 'news-direkt']
     for site in sites:
-        response = requests.get(url + site).text
+        response = urlopen(url + site).read().decode('cp1252').replace('–', '-')
         data = re.findall('img src="([^"]*)".*\r\n.*\r\n.*\r\n[ ]*(.*?)[ ]*<.*?<br>[ \r\n]*(.*) <a href=([^>]*)',
                           response)[::-1]
         data_list = data_list + data
