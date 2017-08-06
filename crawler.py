@@ -4,8 +4,12 @@
 import re
 from urllib.request import urlopen
 from _datetime import datetime
+import logging
 import news
 import database
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
 
 def main():
@@ -17,6 +21,7 @@ def main():
 
     data = get_data(base_url)
     set_data(data, name, base_url)
+
 
 def read_data(url, site, limit=None):
     add = '&limit=' + str(limit) if limit else ''

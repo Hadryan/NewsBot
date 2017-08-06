@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+
 import time
+import logging
 from telegram import Bot, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 import config
 from _datetime import datetime
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
 
 class telegram():
@@ -14,5 +21,8 @@ class telegram():
         add = '_' + datetime.strftime(date, "%d.%m.%Y %H:%M") + '_\n' if date else ''
         msg = '*' + title + '*\n\n' + add + text[:-1] + '[.](' + img + ')'
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen', url=link)]])
-        self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+        try:
+            self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+        except Exception as e:
+            logging.exception(e)
         time.sleep(5)

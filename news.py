@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 
+
+import re
+import logging
 import database
 import telegrambot
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
 
 class News:
@@ -20,7 +26,7 @@ class News:
     def __check(self, value):
         value = value.replace('<br />', '')
         if value == '':
-            raise ValueError
+            logging.warning('String leer - ' + self.__title + ' - '+ str(value.name))
         return value
 
     def set_title(self, title):
@@ -32,7 +38,7 @@ class News:
         tags = ['#' + tag.replace(' ', '') for tag in tags]
         new_text = ' '.join(tags) + text_list[1]
         for tag in tags:
-            if len(tag) > 20:
+            if len(tag) > 15:
                 new_text = text
         return new_text
 
