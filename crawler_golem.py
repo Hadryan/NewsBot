@@ -37,7 +37,6 @@ def get_img(img):
         value = (value + 1) * - 1 if value >= 0 else value * - 1
         numbers = numbers[0] + '-' + str(int(numbers[1]) + value) + '-' + numbers[2]
         result = requests.get(img[0] + '/sp_' + numbers).status_code
-        print(str(result))
         time.sleep(0.5)
     img = img[0] + '/sp_' + numbers
     return img

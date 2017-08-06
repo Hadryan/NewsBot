@@ -22,6 +22,7 @@ class News:
         self.__channel = None
         self.__date = None
         self.__tags = None
+        self.__variante = 2
 
     def __check(self, value):
         value = value.replace('<br />', '')
@@ -88,5 +89,5 @@ class News:
         if self.__insert_db():
             if self.__variante == 1:
                 self.__send_une()
-            else:
+            elif self.__variante == 2:
                 self.__send_deux()
