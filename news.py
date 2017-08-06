@@ -25,8 +25,8 @@ class News:
 
     def __check(self, value):
         value = value.replace('<br />', '')
-        if value == '':
-            logging.warning('String leer - ' + self.__title + ' - '+ str(value.name))
+        value = value.replace('<B>', '')
+        value = value.replace('<B/>', '')
         return value
 
     def set_title(self, title):
