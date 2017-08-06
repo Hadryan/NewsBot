@@ -56,6 +56,9 @@ class News:
     def set_date(self, date):
         self.__date = date
 
+    def set_variante(self, variante):
+        self.__variante = variante
+
     def set_tags(self, tags):
         result = ''
         for tag in tags:
@@ -83,4 +86,7 @@ class News:
 
     def post(self):
         if self.__insert_db():
-            self.__send_deux()
+            if self.__variante == 1:
+                self.__send_une()
+            else:
+                self.__send_deux()

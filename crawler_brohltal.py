@@ -20,7 +20,7 @@ def main():
     check_site(name, base_url, channel_id)
 
     data = get_data(base_url)
-    set_data(data, name, base_url)
+    set_data(data, name)
 
 
 def read_data(url, site, limit=None):
@@ -56,7 +56,7 @@ def get_data(base_url):
     return data_list
 
 
-def set_data(data, name, base_url):
+def set_data(data, name):
     for article in data:
         n = news.News(name)
         n.set_img(article[0])
@@ -64,6 +64,7 @@ def set_data(data, name, base_url):
         n.set_text(article[2], hashtag=True)
         n.set_link(article[3])
         n.set_date(article[4])
+        n.set_variante(1)
         n.post()
 
 
