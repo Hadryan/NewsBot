@@ -1,3 +1,4 @@
 data.db
 data.db-journal
 .idea/
+__pycache__/

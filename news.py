@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
+import database
+
+
 class News:
-    def __init__(self):
+    def __init__(self, site):
+        self.__site = site
         self.__title = None
         self.__text = None
         self.__link = None
@@ -25,3 +29,7 @@ class News:
 
     def set_img(self, img):
         self.__img = self.__check(img)
+
+    def post(self):
+        db = database.Database()
+        db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
