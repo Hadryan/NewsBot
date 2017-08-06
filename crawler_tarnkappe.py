@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def main():
     name = 'tarnkappe'
     base_url = 'https://tarnkappe.info/'
-    channel_id = 10317829
+    channel_id = -1001096556431
 
     check_site(name, base_url, channel_id)
 

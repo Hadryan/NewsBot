@@ -18,7 +18,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def main():
     name = 'golem'
     base_url = 'https://golem.de/'
-    channel_id = -1001113957451
+    channel_id = -1001138540100
 
     check_site(name, base_url, channel_id)
 
@@ -32,11 +32,12 @@ def get_img(img):
     value = 0
     img = re.findall('<img src="([^"]*)"', img)[0]
     img = img.rsplit('/', maxsplit=1)
-    numbers = img[1].split('-')
     while not result == 200 and not value > 10:
+        numbers = img[1].split('-')
         value = (value + 1) * - 1 if value >= 0 else value * - 1
         numbers = numbers[0] + '-' + str(int(numbers[1]) + value) + '-' + numbers[2]
         result = requests.get(img[0] + '/sp_' + numbers).status_code
+        print(str(result))
         time.sleep(0.5)
     img = img[0] + '/sp_' + numbers
     return img
