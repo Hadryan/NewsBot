@@ -30,6 +30,10 @@ class News:
     def set_img(self, img):
         self.__img = self.__check(img)
 
-    def post(self):
+    def __insert_db(self):
         db = database.Database()
-        db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
+        if not db.check_news(self.__title):
+            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
+
+    def post(self):
+        self.__insert_db()

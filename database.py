@@ -12,25 +12,31 @@ class Database():
         self.con = sqlite3.connect(file)
         self.cur = self.con.cursor()
 
-    def check_site(self, name, link):
+    def check_site(self, name):
         self.cur.execute("SELECT id FROM sites WHERE name=?", (name,))
         if len(self.cur.fetchall()) < 1:
-            self._insert_site(name, link)
+          return False
+        return True
 
-    def _insert_site(self, name, link):
+    def insert_site(self, name, link):
         self.cur.execute("INSERT INTO sites (name, link) VALUES(?, ?)", (name, link))
         self.con.commit()
 
+    def check_news(self, title):
+        self.cur.execute("SELECT id FROM news WHERE title=?", (title,))
+        if len(self.cur.fetchall()) < 1:
+            return False
+        return True
+
     def insert_news(self, title, text, link, img, site):
         self.cur.execute("INSERT INTO news (title, text, link, img_link, site_id) VALUES(?, ?, ?, ?, "
-                         + "(SELECT id FROM sites WHERE name=?)')", (title, text, link, img, site))
+                         + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, site))
         self.con.commit()
 
     def __check_db(self, file):
         if not os.path.isfile(file):
-            fd = open(file, 'r')
-            sqlFile = fd.read()
-            fd.close()
+            with open(os.path.join(os.path.dirname(__file__), 'create.sql'), 'r') as f:
+                sqlFile = f.read()
 
             sqlCommands = sqlFile.split(';')
             conn = sqlite3.connect(file)
