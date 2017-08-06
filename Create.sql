@@ -1,0 +1,16 @@
+CREATE TABLE `sites` (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`name`	TEXT NOT NULL,
+	`link`	TEXT NOT NULL
+);
+
+CREATE TABLE `news` (
+	`id`	INTEGER NOT NULL,
+	`site_id`	INTEGER NOT NULL,
+	`title`	TEXT NOT NULL,
+	`text`	TEXT NOT NULL,
+	`link`	TEXT NOT NULL,
+	`img_link`	TEXT NOT NULL,
+	`added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY(`site_id`) REFERENCES `sites`(`id`)
+);
