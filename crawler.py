@@ -10,7 +10,7 @@ import database
 def main():
     name = 'brohltal'
     base_url = 'http://www.brohltal-info24.de/'
-    channel_id = 1131410143
+    channel_id = -1001131410143
 
     check_site(name, base_url, channel_id)
 
@@ -35,7 +35,7 @@ def set_data(data, name, base_url):
         n = news.News(name)
         n.set_img(article[0])
         n.set_title(article[1])
-        n.set_text(article[2])
+        n.set_text(article[2], hashtag=True)
         n.set_link(article[3])
         n.post()
 

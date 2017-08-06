@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import re
 
 import database
 import telegrambot
@@ -17,7 +17,7 @@ class News:
         self.__channel = None
 
     def __check(self, value):
-        value = value.replace('</br>', '')
+        value = value.replace('<br />', '')
         if value == '':
             raise ValueError
         return value
@@ -25,7 +25,12 @@ class News:
     def set_title(self, title):
         self.__title = self.__check(title)
 
-    def set_text(self, text):
+    def set_text(self, text, hashtag=False):
+        if hashtag:
+            text = re.split('[.:]', text, maxsplit=1)
+            tags = text[0].split('/').replace('-', ' ')
+            tags = ['#' + tag.replace(' ', '') for tag in tags]
+            text = ' '.join(tags) + text[1]
         self.__text = self.__check(text)
 
     def set_link(self, link):
@@ -38,7 +43,7 @@ class News:
         db = database.Database()
         if not db.check_news(self.__title):
             db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
-        self.__url, self.__channel  = db.get_data(self.__site)
+        self.__url, self.__channel = db.get_data(self.__site)
 
     def __send(self):
         tg = telegrambot.telegram()
