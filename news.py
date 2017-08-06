@@ -7,7 +7,6 @@ import logging
 import database
 import telegrambot
 
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
@@ -22,6 +21,7 @@ class News:
         self.__url = None
         self.__channel = None
         self.__date = None
+        self.__tags = None
 
     def __check(self, value):
         value = value.replace('<br />', '')
@@ -56,6 +56,13 @@ class News:
     def set_date(self, date):
         self.__date = date
 
+    def set_tags(self, tags):
+        result = ''
+        for tag in tags:
+            tag = tag.replace('-', '').replace(' ', '').replace('.', '')
+            result = result + ' ' + ('#' if not tag[:1] == '#' else '') + tag
+        self.__tags = result
+
     def __insert_db(self):
         db = database.Database()
         if not db.check_news(self.__link):
@@ -64,11 +71,15 @@ class News:
             return True
         return False
 
-    def __send(self):
+    def __send_une(self):
         tg = telegrambot.telegram()
-        tg.send_news(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel,
+        tg.send_var1(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel,
                      date=self.__date)
+
+    def __send_deux(self):
+        tg = telegrambot.telegram()
+        tg.send_var2(self.__title, self.__text, self.__link, self.__img, self.__tags, self.__channel)
 
     def post(self):
         if self.__insert_db():
-            self.__send()
+            self.__send_deux()
