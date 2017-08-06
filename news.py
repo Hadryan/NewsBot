@@ -15,6 +15,7 @@ class News:
         self.__img = None
         self.__url = None
         self.__channel = None
+        self.__date = None
 
     def __check(self, value):
         value = value.replace('<br />', '')
@@ -46,17 +47,21 @@ class News:
     def set_img(self, img):
         self.__img = self.__check(img)
 
+    def set_date(self, date):
+        self.__date = date
+
     def __insert_db(self):
         db = database.Database()
         if not db.check_news(self.__link):
-            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site)
+            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site, date=self.__date)
             self.__url, self.__channel = db.get_data(self.__site)
             return True
         return False
 
     def __send(self):
         tg = telegrambot.telegram()
-        tg.send_news(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel)
+        tg.send_news(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel,
+                     date=self.__date)
 
     def post(self):
         if self.__insert_db():

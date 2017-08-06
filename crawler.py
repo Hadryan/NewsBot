@@ -3,6 +3,7 @@
 
 import re
 from urllib.request import urlopen
+from _datetime import datetime
 import news
 import database
 
@@ -17,16 +18,39 @@ def main():
     data = get_data(base_url)
     set_data(data, name, base_url)
 
+def read_data(url, site, limit=None):
+    add = '&limit=' + str(limit) if limit else ''
+    response = urlopen(url + site + add).read().decode('cp1252').replace('–', '-')
+    data = re.findall('img src="([^"]*)".*\r\n.*\r\n.*\r\n[ ]*(.*?)[ ]*<.*?<br>[ \r\n]*(.*) <a href=([^>]*)>.*\r\n'
+                      + '[ ]*([0-9\.]* [0-9\:]*)', response)[::-1]
+    return list(data)
+
+
+def read_all_data(url, site):
+    limit = 0
+    result = 1
+    data = []
+    while result > 0:
+        adata = read_data(url, site, limit=limit)
+        data = data + adata
+        result = len(adata)
+        limit = limit + 30
+        print(limit)
+        print(len(data))
+    return data
+
 
 def get_data(base_url):
     data_list = []
     url = base_url + 'index.php?site='
     sites = ['newsregio-direkt', 'newsaw-direkt', 'news-direkt']
     for site in sites:
-        response = urlopen(url + site).read().decode('cp1252').replace('–', '-')
-        data = re.findall('img src="([^"]*)".*\r\n.*\r\n.*\r\n[ ]*(.*?)[ ]*<.*?<br>[ \r\n]*(.*) <a href=([^>]*)',
-                          response)[::-1]
-        data_list = data_list + data
+        data_list = data_list + read_all_data(url, site)
+        print(len(data_list))
+    data_list = [list(item) for item in data_list]
+    for item in data_list:
+        item[4] = datetime.strptime(item[4], '%d.%m.%y %H:%M')
+    data_list.sort(key=lambda r: r[4])
     return data_list
 
 
@@ -37,6 +61,7 @@ def set_data(data, name, base_url):
         n.set_title(article[1])
         n.set_text(article[2], hashtag=True)
         n.set_link(article[3])
+        n.set_date(article[4])
         n.post()
 
 
