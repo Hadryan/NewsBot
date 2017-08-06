@@ -37,7 +37,7 @@ def get_data(base_url):
         tags = [y['term'] for y in x['tags']]
         article['tags'] = tags
         data.append(article)
-    return data
+    return data[::-1]
 
 
 def set_data(data, name, base_url):

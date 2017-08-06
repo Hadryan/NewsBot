@@ -40,8 +40,6 @@ def read_all_data(url, site):
         data = data + adata
         result = len(adata)
         limit = limit + 30
-        print(limit)
-        print(len(data))
     return data
 
 
@@ -50,8 +48,7 @@ def get_data(base_url):
     url = base_url + 'index.php?site='
     sites = ['newsregio-direkt', 'newsaw-direkt', 'news-direkt']
     for site in sites:
-        data_list = data_list + read_all_data(url, site)
-        print(len(data_list))
+        data_list = data_list + read_data(url, site)
     data_list = [list(item) for item in data_list]
     for item in data_list:
         item[4] = datetime.strptime(item[4], '%d.%m.%y %H:%M')

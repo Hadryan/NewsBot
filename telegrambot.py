@@ -34,4 +34,4 @@ class telegram():
             self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
         except Exception as e:
             logging.exception(e)
-        time.sleep(5)
+        time.sleep(10)

@@ -60,13 +60,14 @@ class News:
         result = ''
         for tag in tags:
             tag = tag.replace('-', '').replace(' ', '').replace('.', '')
-            result = result + ' ' + ('#' if not tag[:1] == '#' else '') + tag
+            result = result + ('#' if not tag[:1] == '#' else '') + tag + ' '
         self.__tags = result
 
     def __insert_db(self):
         db = database.Database()
         if not db.check_news(self.__link):
-            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site, date=self.__date)
+            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site, date=self.__date,
+                           tags=self.__tags)
             self.__url, self.__channel = db.get_data(self.__site)
             return True
         return False

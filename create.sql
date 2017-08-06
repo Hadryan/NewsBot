@@ -19,6 +19,7 @@ CREATE TABLE `news` (
 	`text`	TEXT NOT NULL,
 	`link`	TEXT NOT NULL,
 	`img_link`	TEXT NOT NULL,
+	`tags`	TEXT,
 	`added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY(`site_id`) REFERENCES `sites`(`id`)
 );

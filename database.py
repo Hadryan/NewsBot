@@ -28,13 +28,16 @@ class Database():
             return False
         return True
 
-    def insert_news(self, title, text, link, img, site, date=None):
-        if not date:
-            self.cur.execute("INSERT INTO news (title, text, link, img_link, site_id) VALUES(?, ?, ?, ?, "
-                             + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, site))
-        else:
+    def insert_news(self, title, text, link, img, site, date=None, tags=None):
+        if date:
             self.cur.execute("INSERT INTO news (title, text, link, img_link, added, site_id) VALUES(?, ?, ?, ?, ?, "
                              + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, date, site))
+        elif tags:
+            self.cur.execute("INSERT INTO news (title, text, link, img_link, tags, site_id) VALUES(?, ?, ?, ?, ?, "
+                             + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, tags, site))
+        else:
+            self.cur.execute("INSERT INTO news (title, text, link, img_link, site_id) VALUES(?, ?, ?, ?, "
+                             + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, site))
         self.con.commit()
 
     def insert_channel(self, site, channel_id):
