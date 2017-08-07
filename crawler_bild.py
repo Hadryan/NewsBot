@@ -37,7 +37,7 @@ def get_data():
         article['text'] = html.unescape(text[-1].split('<br />')[0])
         title = html.unescape(x['title'])
         article['title'] = title
-        img = x['media_thumbnail'][0]['url'].replace(',w=120,', ',w=1200,')
+        img = x['media_thumbnail'][0]['url'].replace(',w=120,', ',w=1200,') if 'media_thumbnail' in x else None
         article['img'] = img
         tags = x['tags']
         tags = [y['term'] for y in tags]

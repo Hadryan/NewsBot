@@ -29,6 +29,7 @@ class Database():
         return True
 
     def insert_news(self, title, text, link, img, site, date=None, tags=None):
+        img = '' if not img else img
         if date:
             self.cur.execute("INSERT INTO news (title, text, link, img_link, added, site_id) VALUES(?, ?, ?, ?, ?, "
                              + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, date, site))

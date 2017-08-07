@@ -6,6 +6,7 @@ import re
 import logging
 import database
 import telegrambot
+from config import debug, owner
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -25,9 +26,15 @@ class News:
         self.__variante = 2
 
     def __check(self, value):
-        value = value.replace('<br />', '')
-        value = value.replace('<B>', '')
-        value = value.replace('<B/>', '')
+        if value:
+            value = value.replace('<br />', '')
+            value = value.replace('<B>', '')
+            value = value.replace('<B/>', '')
+            value = value.replace('<p>', '')
+            value = value.replace('</p>', '')
+            value = value.replace('<p/>', '')
+            value = value.replace('</strong>', '')
+            value = value.replace('<strong>', '')
         return value
 
     def set_title(self, title):
@@ -73,6 +80,8 @@ class News:
             db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site, date=self.__date,
                            tags=self.__tags)
             self.__url, self.__channel = db.get_data(self.__site)
+            if debug:
+                self.__channel = owner
             return True
         return False
 
@@ -83,7 +92,7 @@ class News:
 
     def __send_deux(self):
         tg = telegrambot.telegram()
-        tg.send_var2(self.__title, self.__text, self.__link, self.__img, self.__tags, self.__channel)
+        tg.send_var2(self.__title, self.__text, self.__link, self.__tags, self.__channel, img=self.__img)
 
     def post(self):
         if self.__insert_db():

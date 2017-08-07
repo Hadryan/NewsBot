@@ -1,1 +1,3 @@
-bot_token = ''
+bot_token = 'TOKEN'
+debug = True/False
+owner = 'OWNER-ID'
