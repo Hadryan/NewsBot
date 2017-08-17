@@ -5,6 +5,9 @@ import re
 import logging
 import feedparser
 import html
+
+import requests
+
 import news
 import database
 
@@ -32,7 +35,8 @@ def get_data(base_url):
         text = html.unescape(x['summary'])
         article['text'] = text
         article['title'] = x['title']
-        img = re.findall('size-full" src="([^"]*)"', x['content'][0]['value'])[0]
+        sourcecode = requests.get(article['link']).text
+        img = re.findall('<meta property="og:image" content="([^"]*)"', sourcecode)[0]
         article['img'] = img
         tags = [y['term'] for y in x['tags']]
         article['tags'] = tags
