@@ -8,7 +8,6 @@ from telegram import Bot, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 import config
 from _datetime import datetime
 
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
@@ -33,6 +32,14 @@ class telegram():
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen', url=link)]])
         try:
             self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+        except Exception as e:
+            logging.exception(e)
+        time.sleep(10)
+
+    def send_instant(self, title, link, channel_id):
+        msg = '[' + title + '](' + link + ')'
+        try:
+            self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN)
         except Exception as e:
             logging.exception(e)
         time.sleep(10)

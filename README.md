@@ -9,6 +9,7 @@ The following channels are periodically filled with new content by a cron job:
 * [BILD](https://t.me/bild_de)
 * [Golem.de](https://t.me/golem_de)
 * [Tarnkappe.info](https://t.me/tarnkappe)
+* [Heise.de](https://t.me/heise_de)
 
 
 

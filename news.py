@@ -94,9 +94,15 @@ class News:
         tg = telegrambot.telegram()
         tg.send_var2(self.__title, self.__text, self.__link, self.__tags, self.__channel, img=self.__img)
 
+    def __send_trois(self):
+        tg = telegrambot.telegram()
+        tg.send_instant(self.__title, self.__link, self.__channel)
+
     def post(self):
         if self.__insert_db():
             if self.__variante == 1:
                 self.__send_une()
             elif self.__variante == 2:
                 self.__send_deux()
+            elif self.__variante == 3:
+                self.__send_trois()
