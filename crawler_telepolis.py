@@ -4,6 +4,8 @@
 
 import re
 import logging
+from pprint import pprint
+
 import feedparser
 import html
 import news
@@ -14,9 +16,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    name = 'heise'
-    base_url = 'https://heise.de/'
-    channel_id = -1001135475495
+    name = 'telepolis'
+    base_url = 'https://heise.de/tp'
+    channel_id = -1001128692603
 
     check_site(name, base_url, channel_id)
 
@@ -25,7 +27,7 @@ def main():
 
 
 def get_data():
-    raw_data = feedparser.parse('https://www.heise.de/newsticker/heise-atom.xml')
+    raw_data = feedparser.parse('https://www.heise.de/tp/news-atom.xml')
     data = []
     for x in raw_data['entries']:
         article = dict()
@@ -34,8 +36,6 @@ def get_data():
         article['text'] = text
         title = html.unescape(x['title'])
         article['title'] = title
-        img = re.findall('<img src="([^"]*)"',x['content'][0]['value'])
-        article['img'] = img[0] if img else None
         data.append(article)
     return data[::-1]
 
@@ -43,7 +43,6 @@ def get_data():
 def set_data(data, name):
     for article in data:
         n = news.News(name)
-        n.set_img(article['img'])
         n.set_title(article['title'])
         n.set_text(article['text'])
         n.set_link(article['link'])
