@@ -6,6 +6,7 @@ import re
 import logging
 import feedparser
 import html
+import requests
 import news
 import database
 
@@ -34,10 +35,19 @@ def get_data():
         article['text'] = text
         title = html.unescape(x['title'])
         article['title'] = title
-        img = re.findall('<img src="([^"]*)"',x['content'][0]['value'])
+        img = re.findall('<img src="([^"]*)"', x['content'][0]['value'])
         article['img'] = img[0] if img else None
+        article['img'] = re.sub('scale/geometry/([^/]*)/', 'scale/geometry/720/', article['img'])
+        article['tags'] = get_tags(article['link'])
         data.append(article)
     return data[::-1]
+
+
+def get_tags(link):
+    sourcecode = requests.get(link).text
+    tags = re.findall('name="keywords" content="([^"]*)"', sourcecode)
+    tags = tags[0].split(',') if tags else tags
+    return tags
 
 
 def set_data(data, name):
@@ -47,7 +57,8 @@ def set_data(data, name):
         n.set_title(article['title'])
         n.set_text(article['text'])
         n.set_link(article['link'])
-        n.set_variante(3)
+        n.set_tags(article['tags'])
+        n.set_variante(2)
         n.post()
 
 

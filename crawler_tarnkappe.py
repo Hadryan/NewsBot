@@ -33,6 +33,7 @@ def get_data(base_url):
         article = dict()
         article['link'] = x['link']
         text = html.unescape(x['summary'])
+        text = text.split()
         article['text'] = text
         article['title'] = x['title']
         sourcecode = requests.get(article['link']).text

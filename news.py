@@ -70,7 +70,8 @@ class News:
     def set_tags(self, tags):
         result = ''
         for tag in tags:
-            tag = tag.replace('-', '').replace(' ', '').replace('.', '')
+            tag = tag.replace('-', '').replace(' ', '').replace('.', '').replace('&', '').replace("'", '').replace('/',
+                                                                                                                   '')
             result = result + ('#' if not tag[:1] == '#' else '') + tag + ' '
         self.__tags = result
 

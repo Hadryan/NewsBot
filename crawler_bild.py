@@ -27,7 +27,7 @@ def main():
 
 
 def get_data():
-    raw_data = feedparser.parse('http://www.bild.de/rssfeeds/vw-alles/vw-alles-26970192,sort=1,view=rss2.bild.xml')
+    raw_data = feedparser.parse('http://www.bild.de/rssfeeds/vw-news/vw-news-16726644,sort=1,view=rss2.bild.xml')
     data = []
     for x in raw_data['entries']:
         article = dict()

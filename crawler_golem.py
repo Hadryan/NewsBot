@@ -26,7 +26,7 @@ def main():
     set_data(data, name)
 
 
-#This function determines the original image because the image in the feed has a bad resolution
+# This function determines the original image because the image in the feed has a bad resolution
 def get_img(img):
     result = 404
     value = 0
@@ -53,7 +53,7 @@ def get_data():
         title = html.unescape(x['title'])
         article['title'] = title
         article['img'] = get_img(x['content'][0]['value'])
-        tags = re.findall('a href="[^"]*">([^<]*)<', x['summary'])
+        tags = re.findall('a href="[^"]*">([^<]*)<', html.unescape(x['summary']))
         article['tags'] = tags
         data.append(article)
     return data[::-1]
