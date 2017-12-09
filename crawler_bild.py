@@ -6,8 +6,6 @@ import re
 import logging
 import feedparser
 import html
-import requests
-import time
 import news
 import database
 
@@ -16,7 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    name = 'bild'
+    name = 'bild_de'
     alias = 'Bild.de'
     base_url = 'http://www.bild.de/'
     channel_id = -1001142790377

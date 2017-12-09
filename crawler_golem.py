@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    name = 'golem'
+    name = 'golem_de'
     alias = 'Golem.de'
     base_url = 'https://golem.de/'
     channel_id = -1001138540100

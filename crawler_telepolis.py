@@ -16,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    name = 'telepolis'
+    name = 'telepolis_de'
     alias = 'Telepolis.de'
     base_url = 'https://heise.de/tp'
     channel_id = -1001128692603

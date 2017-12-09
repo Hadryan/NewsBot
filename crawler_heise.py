@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def main():
-    name = 'heise'
+    name = 'heise_de'
     alias = 'Heise.de'
     base_url = 'https://heise.de/'
     channel_id = -1001135475495
