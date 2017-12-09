@@ -17,10 +17,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 def main():
     name = 'tarnkappe'
+    alias = 'Tarnkappe.info'
     base_url = 'https://tarnkappe.info/'
     channel_id = -1001096556431
 
-    check_site(name, base_url, channel_id)
+    check_site(name, alias, base_url, channel_id)
 
     data = get_data(base_url)
     set_data(data, name, base_url)
@@ -33,7 +34,6 @@ def get_data(base_url):
         article = dict()
         article['link'] = x['link']
         text = html.unescape(x['summary'])
-        text = text.split()
         article['text'] = text
         article['title'] = x['title']
         sourcecode = requests.get(article['link']).text
@@ -56,10 +56,10 @@ def set_data(data, name, base_url):
         n.post()
 
 
-def check_site(name, link, channel_id):
+def check_site(name, alias, link, channel_id):
     db = database.Database()
     if not db.check_site(name):
-        db.insert_site(name, link)
+        db.insert_site(name, alias, link)
         db.insert_channel(name, channel_id)
 
 

@@ -14,10 +14,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 def main():
     name = 'brohltal'
+    alias = 'BrohltalInfo24'
     base_url = 'http://www.brohltal-info24.de/'
     channel_id = -1001131410143
 
-    check_site(name, base_url, channel_id)
+    check_site(name, alias, base_url, channel_id)
 
     data = get_data(base_url)
     set_data(data, name)
@@ -68,10 +69,10 @@ def set_data(data, name):
         n.post()
 
 
-def check_site(name, link, channel_id):
+def check_site(name, alias, link, channel_id):
     db = database.Database()
     if not db.check_site(name):
-        db.insert_site(name, link)
+        db.insert_site(name, alias, link)
         db.insert_channel(name, channel_id)
 
 

@@ -16,10 +16,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 def main():
     name = 'heise'
+    alias = 'Heise.de'
     base_url = 'https://heise.de/'
     channel_id = -1001135475495
 
-    check_site(name, base_url, channel_id)
+    check_site(name, alias, base_url, channel_id)
 
     data = get_data()
     set_data(data, name)
@@ -36,8 +37,9 @@ def get_data():
         title = html.unescape(x['title'])
         article['title'] = title
         img = re.findall('<img src="([^"]*)"', x['content'][0]['value'])
-        article['img'] = img[0] if img else None
-        article['img'] = re.sub('scale/geometry/([^/]*)/', 'scale/geometry/720/', article['img'])
+        if img:
+            article['img'] = img[0]
+            article['img'] = re.sub('scale/geometry/([^/]*)/', 'scale/geometry/720/', article['img'])
         article['tags'] = get_tags(article['link'])
         data.append(article)
     return data[::-1]
@@ -53,7 +55,7 @@ def get_tags(link):
 def set_data(data, name):
     for article in data:
         n = news.News(name)
-        n.set_img(article['img'])
+        n.set_img(article['img'] if 'img' in article else None)
         n.set_title(article['title'])
         n.set_text(article['text'])
         n.set_link(article['link'])
@@ -62,10 +64,10 @@ def set_data(data, name):
         n.post()
 
 
-def check_site(name, link, channel_id):
+def check_site(name, alias, link, channel_id):
     db = database.Database()
     if not db.check_site(name):
-        db.insert_site(name, link)
+        db.insert_site(name, alias, link)
         db.insert_channel(name, channel_id)
 
 

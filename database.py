@@ -18,8 +18,8 @@ class Database():
             return False
         return True
 
-    def insert_site(self, name, link):
-        self.cur.execute("INSERT INTO sites (name, link) VALUES(?, ?)", (name, link))
+    def insert_site(self, name, alias, link):
+        self.cur.execute("INSERT INTO sites (name, alias, link) VALUES(?, ?, ?)", (name, alias, link))
         self.con.commit()
 
     def check_news(self, link):
