@@ -40,6 +40,8 @@ class Database():
             self.cur.execute("INSERT INTO news (title, text, link, img_link, site_id) VALUES(?, ?, ?, ?, "
                              + "(SELECT id FROM sites WHERE name=?))", (title, text, link, img, site))
         self.con.commit()
+        self.cur.execute("SELECT MAX(id) FROM news")
+        return self.cur.fetchall()[0][0]
 
     def insert_channel(self, site, channel_id):
         self.cur.execute("INSERT INTO channels (site_id, channel_id) VALUES ("
@@ -47,7 +49,7 @@ class Database():
         self.con.commit()
 
     def get_data(self, site_name):
-        self.cur.execute("SELECT s.link, c.channel_id FROM sites s INNER JOIN channels c ON s.id=c.site_id WHERE "
+        self.cur.execute("SELECT s.link, c.channel_id, s.alias FROM sites s INNER JOIN channels c ON s.id=c.site_id WHERE "
                          + "s.name=?", (site_name,))
         result = self.cur.fetchall()[:][0]
         return result

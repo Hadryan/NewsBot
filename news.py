@@ -7,6 +7,8 @@ import logging
 import database
 import telegrambot
 from config import debug, owner
+from hashids import Hashids
+import config
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -24,6 +26,14 @@ class News:
         self.__date = None
         self.__tags = None
         self.__variante = 2
+        self.__alias = None
+        self.__id = None
+        self.__hash = None
+
+    def _get_data(self):
+        return {'id': self.__id, 'alias': self.__alias, 'title': self.__title, 'text': self.__text, 'link': self.__link,
+                'img': self.__img, 'url': self.__url, 'channel': self.__channel, 'date': self.__date,
+                'tags': self.__tags, 'site': self.__site, 'hash': self.__hash}
 
     def __check(self, value):
         if value:
@@ -75,12 +85,18 @@ class News:
             result = result + ('#' if not tag[:1] == '#' else '') + tag + ' '
         self.__tags = result
 
+    def _hash_id(self):
+        hashids = Hashids(salt=config.salt, min_length=3)
+        self.__hash = hashids.encode(self.__id)
+
     def __insert_db(self):
         db = database.Database()
         if not db.check_news(self.__link):
-            db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site, date=self.__date,
-                           tags=self.__tags)
-            self.__url, self.__channel = db.get_data(self.__site)
+            self.__id = db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site,
+                                       date=self.__date,
+                                       tags=self.__tags)
+            self._hash_id()
+            self.__url, self.__channel, self.__alias = db.get_data(self.__site)
             if debug:
                 self.__channel = owner
             return True
@@ -93,7 +109,7 @@ class News:
 
     def __send_deux(self):
         tg = telegrambot.telegram()
-        tg.send_var2(self.__title, self.__text, self.__link, self.__tags, self.__channel, img=self.__img)
+        tg.send_var2(self._get_data())
 
     def __send_trois(self):
         tg = telegrambot.telegram()

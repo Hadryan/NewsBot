@@ -26,12 +26,15 @@ class telegram():
             logging.exception(e)
         time.sleep(5)
 
-    def send_var2(self, title, text, link, tags, channel_id, img=None):
-        msg = '*' + title + '*\n' + tags + '\n\n' + text
-        msg = msg + '\n[Foto](' + img + ')' if img else msg
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen ↗️', url=link)]])
+    def send_var2(self, data):
+        msg = '*' + data['title'] + '*\n' + data['tags'] + '\n\n' + data['text']
+        msg = msg + '\n[Foto](' + data['img'] + ')' if data['img'] else msg
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen ↗️', url=data['link']),
+                                          InlineKeyboardButton('Teilen',
+                                                               switch_inline_query='{site}_{hash}'.format(**data))]])
         try:
-            self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+            self.__bot.sendMessage(text=msg, chat_id=data['channel'], parse_mode=ParseMode.MARKDOWN,
+                                   reply_markup=keyboard)
         except Exception as e:
             logging.exception(e)
         time.sleep(10)
