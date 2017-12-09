@@ -86,7 +86,7 @@ class News:
         self.__tags = result
 
     def _hash_id(self):
-        hashids = Hashids(salt=config.salt, min_length=3)
+        hashids = Hashids(salt=config.salt, min_length=6)
         self.__hash = hashids.encode(self.__id)
 
     def __insert_db(self):

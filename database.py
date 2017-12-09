@@ -51,8 +51,12 @@ class Database():
     def get_data(self, site_name):
         self.cur.execute("SELECT s.link, c.channel_id, s.alias FROM sites s INNER JOIN channels c ON s.id=c.site_id WHERE "
                          + "s.name=?", (site_name,))
-        result = self.cur.fetchall()[:][0]
-        return result
+        return self.cur.fetchall()[:][0]
+
+    def get_news(self, news_id):
+        self.cur.execute("SELECT n.title, n.text, n.link, n.img_link, n.tags, n.added, s.alias FROM news n INNER JOIN "
+                         + "sites s ON n.site_id=s.id INNER JOIN channels c on s.id=c.site_id WHERE n.id=?", (news_id,))
+        return self.cur.fetchall()[:][0]
 
     def __check_db(self, file):
         if not os.path.isfile(file):

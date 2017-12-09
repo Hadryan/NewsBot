@@ -30,8 +30,7 @@ class telegram():
         msg = '*' + data['title'] + '*\n' + data['tags'] + '\n\n' + data['text']
         msg = msg + '\n[Foto](' + data['img'] + ')' if data['img'] else msg
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen ↗️', url=data['link']),
-                                          InlineKeyboardButton('Teilen',
-                                                               switch_inline_query='{site}_{hash}'.format(**data))]])
+                                          InlineKeyboardButton('Teilen', switch_inline_query=data['hash'])]])
         try:
             self.__bot.sendMessage(text=msg, chat_id=data['channel'], parse_mode=ParseMode.MARKDOWN,
                                    reply_markup=keyboard)
