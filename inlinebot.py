@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from uuid import uuid4
+
+import re
 from hashids import Hashids
 from telegram import InlineQueryResultArticle, ParseMode, InputTextMessageContent, InlineKeyboardMarkup, \
     InlineKeyboardButton
@@ -9,6 +11,7 @@ from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import logging
 import config
 import database
+from datetime import datetime
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -39,7 +42,8 @@ def inlinequery(bot, update):
             description=text,
             thumb_url=img_link,
             input_message_content=InputTextMessageContent(
-                message_text="*{}*\n\n{}\n[Foto]({})".format(title, text, img_link),
+                message_text="*{}*\n_Artikel vom {} Uhr_\n\n{}\n[Foto]({})".format(title, "{2}.{1}.{0} {3}:{4}".format(*re.split(r'[- :]', added)),
+                                                                                  text, img_link),
                 parse_mode=ParseMode.MARKDOWN),
             reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton(

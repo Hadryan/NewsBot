@@ -104,8 +104,8 @@ class News:
 
     def __send_une(self):
         tg = telegrambot.telegram()
-        tg.send_var1(self.__title, self.__text, self.__url + self.__link, self.__url + self.__img, self.__channel,
-                     date=self.__date)
+        tg.send_var1(self.__title, self.__text, self.__link, self.__hash, self.__img,
+                     self.__channel, date=self.__date)
 
     def __send_deux(self):
         tg = telegrambot.telegram()

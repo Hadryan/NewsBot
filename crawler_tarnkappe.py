@@ -58,7 +58,9 @@ def set_data(data, name, base_url):
 
 def check_site(name, alias, link, channel_id):
     db = database.Database()
-    if not db.check_site(name):
+    if db.check_site(name):
+        db.update_site(name, alias, link)
+    else:
         db.insert_site(name, alias, link)
         db.insert_channel(name, channel_id)
 

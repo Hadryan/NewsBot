@@ -16,12 +16,17 @@ class telegram():
     def __init__(self):
         self.__bot = Bot(config.bot_token)
 
-    def send_var1(self, title, text, link, img, channel_id, date=None):
+    def __get_keyboard(self, link, hash):
+        keyboard = [[InlineKeyboardButton('Artikel lesen ↗️', url=link),
+                     InlineKeyboardButton('Teilen 🗣', switch_inline_query=hash)]]
+        return InlineKeyboardMarkup(keyboard)
+
+    def send_var1(self, title, text, link, hash, img, channel_id, date=None):
         add = '_' + datetime.strftime(date, "%d.%m.%Y %H:%M") + '_\n' if date else ''
         msg = '*' + title + '*\n\n' + add + text[:-1] + '[.](' + img + ')'
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen ↗️', url=link)]])
         try:
-            self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN, reply_markup=keyboard)
+            self.__bot.sendMessage(text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN,
+                                   reply_markup=self.__get_keyboard(link, hash))
         except Exception as e:
             logging.exception(e)
         time.sleep(5)
@@ -29,11 +34,9 @@ class telegram():
     def send_var2(self, data):
         msg = '*' + data['title'] + '*\n' + data['tags'] + '\n\n' + data['text']
         msg = msg + '\n[Foto](' + data['img'] + ')' if data['img'] else msg
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton('Artikel lesen ↗️', url=data['link']),
-                                          InlineKeyboardButton('Teilen 🗣', switch_inline_query=data['hash'])]])
         try:
             self.__bot.sendMessage(text=msg, chat_id=data['channel'], parse_mode=ParseMode.MARKDOWN,
-                                   reply_markup=keyboard)
+                                   reply_markup=self.__get_keyboard(data['link'], data['hash']))
         except Exception as e:
             logging.exception(e)
         time.sleep(10)

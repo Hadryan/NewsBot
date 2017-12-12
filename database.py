@@ -22,6 +22,10 @@ class Database():
         self.cur.execute("INSERT INTO sites (name, alias, link) VALUES(?, ?, ?)", (name, alias, link))
         self.con.commit()
 
+    def update_site(self, name, alias, link):
+        self.cur.execute("UPDATE sites SET alias=?, link=? WHERE name=?", (alias, link, name))
+        self.con.commit()
+
     def check_news(self, link):
         self.cur.execute("SELECT id FROM news WHERE link=?", (link,))
         if len(self.cur.fetchall()) < 1:

@@ -21,7 +21,7 @@ def main():
     check_site(name, alias, base_url, channel_id)
 
     data = get_data(base_url)
-    set_data(data, name)
+    set_data(data, name, base_url)
 
 
 def read_data(url, site, limit=None):
@@ -54,16 +54,18 @@ def get_data(base_url):
     for item in data_list:
         item[4] = datetime.strptime(item[4], '%d.%m.%y %H:%M')
     data_list.sort(key=lambda r: r[4])
+    for x in data_list:
+        x[4] = None
     return data_list
 
 
-def set_data(data, name):
+def set_data(data, name, base_url):
     for article in data:
         n = news.News(name)
-        n.set_img(article[0])
+        n.set_img(base_url + article[0])
         n.set_title(article[1])
         n.set_text(article[2], hashtag=True)
-        n.set_link(article[3])
+        n.set_link(base_url + article[3])
         n.set_date(article[4])
         n.set_variante(1)
         n.post()
@@ -71,7 +73,9 @@ def set_data(data, name):
 
 def check_site(name, alias, link, channel_id):
     db = database.Database()
-    if not db.check_site(name):
+    if db.check_site(name):
+        db.update_site(name, alias, link)
+    else:
         db.insert_site(name, alias, link)
         db.insert_channel(name, channel_id)
 
