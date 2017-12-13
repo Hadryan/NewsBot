@@ -91,7 +91,8 @@ class News:
 
     def __insert_db(self):
         db = database.Database()
-        if not db.check_news(self.__link):
+        available = db.check_news(self.__link) if self.__link[:4] == 'http' else db.check_news(self.__url + self.__link)
+        if not available:
             self.__id = db.insert_news(self.__title, self.__text, self.__link, self.__img, self.__site,
                                        date=self.__date,
                                        tags=self.__tags)
