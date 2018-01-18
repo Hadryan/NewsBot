@@ -3,3 +3,4 @@ data.db-journal
 .idea/
 __pycache__/
 config.py
+venv/
