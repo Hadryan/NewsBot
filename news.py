@@ -109,8 +109,13 @@ class News:
                      self.__channel, date=self.__date)
 
     def __send_deux(self):
+        db = database.Database()
         tg = telegrambot.telegram()
-        tg.send_var2(self._get_data())
+        probably_msg_id = db.get_max_message_id(self.__site)
+        probably_msg_id = int(probably_msg_id if probably_msg_id else 0) + 1
+        self.__msg_id = tg.send_var2(self._get_data(), probably_msg_id)
+        if self.__msg_id:
+            db.update_message_id(self.__id, self.__msg_id)
 
     def __send_trois(self):
         tg = telegrambot.telegram()

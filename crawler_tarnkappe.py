@@ -5,9 +5,7 @@ import re
 import logging
 import feedparser
 import html
-
 import requests
-
 import news
 import database
 

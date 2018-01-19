@@ -26,11 +26,20 @@ class Database():
         self.cur.execute("UPDATE sites SET alias=?, link=? WHERE name=?", (alias, link, name))
         self.con.commit()
 
+    def update_message_id(self, id, message_id):
+        self.cur.execute("UPDATE news SET message_id=? WHERE id=?", (message_id, id))
+        self.con.commit()
+
     def check_news(self, link):
         self.cur.execute("SELECT id FROM news WHERE link=?", (link,))
         if len(self.cur.fetchall()) < 1:
             return False
         return True
+
+    def get_max_message_id(self, name):
+        self.cur.execute("SELECT MAX(n.message_id) FROM news n INNER JOIN sites s ON n.site_id=s.id WHERE s.name=?",
+                         (name,))
+        return self.cur.fetchall()[0][0]
 
     def insert_news(self, title, text, link, img, site, date=None, tags=None):
         img = '' if not img else img

@@ -31,15 +31,17 @@ class telegram():
             logging.exception(e)
         time.sleep(5)
 
-    def send_var2(self, data):
+    def send_var2(self, data, probably_msg_id):
         msg = '*' + data['title'] + '*\n' + data['tags'] + '\n\n' + data['text']
-        msg = msg + '\n[Foto](' + data['img'] + ')' if data['img'] else msg
+        arrow = '[👉](' + data['img'] + ')' if data['img'] else '👉'
+        msg = "{}\n\n Teilen {} `t.me/{}/{}`".format(msg, arrow, data['site'], probably_msg_id)
         try:
-            self.__bot.sendMessage(text=msg, chat_id=data['channel'], parse_mode=ParseMode.MARKDOWN,
-                                   reply_markup=self.__get_keyboard(data['link'], data['hash']))
+            msg_id = self.__bot.sendMessage(text=msg, chat_id=data['channel'], parse_mode=ParseMode.MARKDOWN,
+                                   reply_markup=self.__get_keyboard(data['link'], data['hash']))['message_id']
         except Exception as e:
             logging.exception(e)
-        time.sleep(10)
+            msg_id = False
+        return msg_id
 
     def send_instant(self, title, link, channel_id):
         msg = '[' + title + '](' + link + ')'

@@ -22,5 +22,6 @@ CREATE TABLE `news` (
 	`img_link`	TEXT NOT NULL,
 	`tags`	TEXT,
 	`added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `message_id` INTEGER,
 	FOREIGN KEY(`site_id`) REFERENCES `sites`(`id`)
 );
