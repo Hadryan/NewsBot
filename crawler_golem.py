@@ -7,7 +7,6 @@ import logging
 import feedparser
 import html
 import requests
-import time
 import news
 import database
 
@@ -27,22 +26,6 @@ def main():
     set_data(data, name)
 
 
-# This function determines the original image because the image in the feed has a bad resolution
-def get_img(img):
-    result = 404
-    value = 0
-    img = re.findall('<img src="([^"]*)"', img)[0]
-    img = img.rsplit('/', maxsplit=1)
-    while not result == 200 and not value > 10:
-        numbers = img[1].split('-')
-        value = (value + 1) * - 1 if value >= 0 else value * - 1
-        numbers = numbers[0] + '-' + str(int(numbers[1]) + value) + '-' + numbers[2]
-        result = requests.get(img[0] + '/sp_' + numbers).status_code
-        time.sleep(0.5)
-    img = img[0] + '/sp_' + numbers
-    return img
-
-
 def get_data():
     raw_data = feedparser.parse('https://rss.golem.de/rss.php?feed=RSS2.0')
     data = []
@@ -53,7 +36,8 @@ def get_data():
         article['text'] = text
         title = html.unescape(x['title'])
         article['title'] = title
-        article['img'] = get_img(x['content'][0]['value'])
+        article_code = requests.get(article['link']).text
+        article['img'] = re.findall('"twitter:image" property="og:image" content="([^"]*)"', article_code)[0]
         tags = re.findall('a href="[^"]*">([^<]*)<', html.unescape(x['summary']))
         article['tags'] = tags
         data.append(article)
