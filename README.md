@@ -10,10 +10,4 @@ The following channels are periodically filled with new content by a cron job:
 * [Golem.de](https://t.me/golem_de)
 * [Tarnkappe.info](https://t.me/tarnkappe)
 * [Heise.de](https://t.me/heise_de)
-
-
-
-
-### **This project is dead.**
-
-**With "Instant View", Telegram has created a better possibility to display links from news pages. Therefore, the developer does not want to continue this project until further notice.**
+* [Telepolis](https://t.me/telepolis_de)
