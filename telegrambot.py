@@ -4,7 +4,12 @@
 
 import time
 import logging
-from telegram import Bot, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
+
+from telegram.bot import Bot
+from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
+from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from telegram.parsemode import ParseMode
+
 import config
 from _datetime import datetime
 
@@ -12,7 +17,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 
-class telegram():
+class Telegram():
     def __init__(self):
         self.__bot = Bot(config.bot_token)
 

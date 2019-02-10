@@ -1,27 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
-from urllib.request import urlopen
-from _datetime import datetime
 import logging
-import news
+import re
+from _datetime import datetime
+from urllib.request import urlopen
+
 import database
+from news_site import Site
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 
 def main():
-    name = 'brohltal'
-    alias = 'BrohltalInfo24'
-    base_url = 'http://www.brohltal-info24.de/'
-    channel_id = -1001131410143
+    site = Site()
+    site.name = 'brohltal'
+    site.alias = 'BrohltalInfo24'
+    site.base_url = 'http://www.brohltal-info24.de/'
+    site.channel_id = -1001131410143
 
-    check_site(name, alias, base_url, channel_id)
+    for article in get_data(site.base_url):
+        text, tags = create_hashtag(article[2])
+        site.add_article(img=site.base_url + article[0], title=article[1], text=text, tags=tags, date=article[4],
+                         link=site.base_url + article[3])
+    site.post(variant=1)
 
-    data = get_data(base_url)
-    set_data(data, name, base_url)
+
+def create_hashtag(text):
+    text_list = re.split('[.:]', text, maxsplit=1)
+    tags = re.split('[\/-]', text_list[0])
+    tags = ['#' + tag.replace(' ', '') for tag in tags]
+    new_text = text_list[1]
+    for tag in tags:
+        if len(tag) > 15:
+            return text, []
+    return new_text, tags
 
 
 def read_data(url, site, limit=None):
@@ -57,27 +71,6 @@ def get_data(base_url):
     for x in data_list:
         x[4] = None
     return data_list
-
-
-def set_data(data, name, base_url):
-    for article in data:
-        n = news.News(name)
-        n.set_img(base_url + article[0])
-        n.set_title(article[1])
-        n.set_text(article[2], hashtag=True)
-        n.set_link(base_url + article[3])
-        n.set_date(article[4])
-        n.set_variante(1)
-        n.post()
-
-
-def check_site(name, alias, link, channel_id):
-    db = database.Database()
-    if db.check_site(name):
-        db.update_site(name, alias, link)
-    else:
-        db.insert_site(name, alias, link)
-        db.insert_channel(name, channel_id)
 
 
 if __name__ == '__main__':

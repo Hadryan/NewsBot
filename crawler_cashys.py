@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import html
-import re
-from pprint import pprint
-from urllib.request import urlopen, Request
-import requests
-from _datetime import datetime
 import logging
-import news
+import re
+
+import requests
+
 import database
+import news
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -35,7 +34,7 @@ def read_data(url):
 
 def get_img(url):
     code = requests.get(url).text
-    
+
 
 def get_data(base_url):
     data_list = read_data(base_url)

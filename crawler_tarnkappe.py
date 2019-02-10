@@ -1,66 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
-import logging
-import feedparser
 import html
+import logging
+import re
+
+import feedparser
 import requests
-import news
-import database
+
+from news_site import Site
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
 
 def main():
-    name = 'tarnkappe'
-    alias = 'Tarnkappe.info'
-    base_url = 'https://tarnkappe.info/'
-    channel_id = -1001096556431
+    site = Site()
+    site.name = 'tarnkappe'
+    site.alias = 'Tarnkappe.info'
+    site.base_url = 'https://tarnkappe.info/'
+    site.channel_id = -1001096556431
 
-    check_site(name, alias, base_url, channel_id)
-
-    data = get_data(base_url)
-    set_data(data, name, base_url)
-
-
-def get_data(base_url):
-    raw_data = feedparser.parse(base_url + 'feed/')
-    data = []
+    raw_data = feedparser.parse(site.base_url + 'feed/')
     for x in raw_data['entries']:
-        article = dict()
-        article['link'] = x['link']
         text = html.unescape(x['summary'])
-        article['text'] = text
-        article['title'] = x['title']
-        sourcecode = requests.get(article['link']).text
+        sourcecode = requests.get(x['link']).text
         img = re.findall('<meta property="og:image" content="([^"]*)"', sourcecode)[0]
-        article['img'] = img
         tags = [y['term'] for y in x['tags']]
-        article['tags'] = tags
-        data.append(article)
-    return data[::-1]
-
-
-def set_data(data, name, base_url):
-    for article in data:
-        n = news.News(name)
-        n.set_img(article['img'])
-        n.set_title(article['title'])
-        n.set_text(article['text'])
-        n.set_link(article['link'])
-        n.set_tags(article['tags'])
-        n.post()
-
-
-def check_site(name, alias, link, channel_id):
-    db = database.Database()
-    if db.check_site(name):
-        db.update_site(name, alias, link)
-    else:
-        db.insert_site(name, alias, link)
-        db.insert_channel(name, channel_id)
+        site.add_article(link=x['link'], title=x['title'], text=text, img=img, tags=tags)
+    site.post()
 
 
 if __name__ == '__main__':

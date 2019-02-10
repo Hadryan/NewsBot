@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
-import re
 import logging
+import re
+
+from hashids import Hashids
+
+import config
 import database
 import telegrambot
 from config import debug, owner
-from hashids import Hashids
-import config
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -50,19 +52,7 @@ class News:
     def set_title(self, title):
         self.__title = self.__check(title)
 
-    def __create_hashtag(self, text):
-        text_list = re.split('[.:]', text, maxsplit=1)
-        tags = re.split('[\/-]', text_list[0])
-        tags = ['#' + tag.replace(' ', '') for tag in tags]
-        new_text = ' '.join(tags) + text_list[1]
-        for tag in tags:
-            if len(tag) > 15:
-                new_text = text
-        return new_text
-
-    def set_text(self, text, hashtag=False):
-        if hashtag:
-            text = self.__create_hashtag(text)
+    def set_text(self, text):
         self.__text = self.__check(text)
 
     def set_link(self, link):
@@ -104,13 +94,13 @@ class News:
         return False
 
     def __send_une(self):
-        tg = telegrambot.telegram()
+        tg = telegrambot.Telegram()
         tg.send_var1(self.__title, self.__text, self.__link, self.__hash, self.__img,
                      self.__channel, date=self.__date)
 
     def __send_deux(self):
         db = database.Database()
-        tg = telegrambot.telegram()
+        tg = telegrambot.Telegram()
         probably_msg_id = db.get_max_message_id(self.__site)
         probably_msg_id = int(probably_msg_id if probably_msg_id else 0) + 1
         self.__msg_id = tg.send_var2(self._get_data(), probably_msg_id)
@@ -118,7 +108,7 @@ class News:
             db.update_message_id(self.__id, self.__msg_id)
 
     def __send_trois(self):
-        tg = telegrambot.telegram()
+        tg = telegrambot.Telegram()
         tg.send_instant(self.__title, self.__link, self.__channel)
 
     def post(self):
