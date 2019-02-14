@@ -1,4 +1,4 @@
-bot_token = 'TOKEN'
-debug = True/False
-owner = 'OWNER-ID'
-salt = 'SALT-FOR-IDs'
+bot_token = "TOKEN"
+debug = True / False
+owner = "OWNER-ID"
+salt = "SALT-FOR-IDs"
