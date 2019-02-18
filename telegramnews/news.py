@@ -9,10 +9,10 @@ from datetime import datetime
 import pytz
 from hashids import Hashids
 
-import config
-import database
-import telegrambot
-from variants import VERSION_1, VERSION_2, VERSION_3
+from . import config
+from . import database
+from . import telegrambot
+from .variants import VERSION_1, VERSION_2, VERSION_3
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO

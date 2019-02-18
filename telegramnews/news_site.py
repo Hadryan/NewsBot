@@ -1,7 +1,6 @@
-import config
-import database
-import news
-import telegrambot
+from . import database
+from . import news
+from . import telegrambot
 
 
 class Site:

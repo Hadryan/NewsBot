@@ -8,7 +8,7 @@ import re
 import feedparser
 import requests
 
-from news_site import Site
+from telegramnews import Site
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO

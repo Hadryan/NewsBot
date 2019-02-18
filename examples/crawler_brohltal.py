@@ -6,8 +6,7 @@ import re
 from _datetime import datetime
 from urllib.request import urlopen
 
-import database
-from news_site import Site
+from telegramnews import Site
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO

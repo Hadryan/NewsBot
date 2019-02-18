@@ -15,9 +15,9 @@ from telegram import (
 )
 from telegram.ext import CommandHandler, InlineQueryHandler, Updater
 
-import config
-import database
-from news import Article
+from . import config
+from . import database
+from .news import Article
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -84,7 +84,7 @@ def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
-def main():
+def run():
     updater = Updater(config.bot_token)
 
     dp = updater.dispatcher
@@ -99,4 +99,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()
