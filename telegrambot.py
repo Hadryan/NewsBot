@@ -31,6 +31,14 @@ class Telegram:
         ]
         return InlineKeyboardMarkup(keyboard)
 
+    def __get_keyboard_new(self, buttons):
+        keyboard = []
+        if "link" in buttons:
+            keyboard.append(
+                [InlineKeyboardButton("Artikel lesen ↗️", url=buttons["link"])]
+            )
+        return InlineKeyboardMarkup(keyboard)
+
     def send_var1(self, title, text, link, hash, img, channel_id, date=None):
         add = "_" + datetime.strftime(date, "%d.%m.%Y %H:%M") + "_\n" if date else ""
         msg = "*" + title + "*\n\n" + add + text[:-1] + "[.](" + img + ")"
@@ -72,3 +80,16 @@ class Telegram:
         except Exception as e:
             logging.exception(e)
         time.sleep(10)
+
+    def send(self, msg, channel_id, keyboard):
+        try:
+            msg_id = self.__bot.sendMessage(
+                text=msg,
+                chat_id=channel_id,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=self.__get_keyboard_new(keyboard),
+            )["message_id"]
+        except Exception as e:
+            logging.exception(e)
+            msg_id = 0
+        return msg_id

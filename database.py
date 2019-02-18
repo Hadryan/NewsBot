@@ -101,7 +101,7 @@ class Database:
         self.cur.execute(
             "SELECT n.title, n.text, n.link, n.img_link, n.tags, n.added, s.alias, s.name FROM news n "
             + "INNER JOIN sites s ON n.site_id=s.id INNER JOIN channels c on s.id=c.site_id WHERE s.name=? OR "
-            + "s.short=? ORDER BY n.id LIMIT 10",
+            + "s.short=? ORDER BY n.id DESC LIMIT 10",
             (name, name),
         )
         return self.cur.fetchall()[:]

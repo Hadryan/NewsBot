@@ -20,6 +20,7 @@ def main():
     site.alias = "BrohltalInfo24"
     site.base_url = "http://www.brohltal-info24.de/"
     site.channel_id = -1001131410143
+    site.short = "brohl"
 
     for article in get_data(site.base_url):
         text, tags = create_hashtag(article[2])
@@ -31,7 +32,7 @@ def main():
             date=article[4],
             link=site.base_url + article[3],
         )
-    site.post(variant=1)
+    site.post(variant=3)
 
 
 def create_hashtag(text):

@@ -26,7 +26,7 @@ def main():
         text = html.unescape(x["summary"])
         title = html.unescape(x["title"])
         site.add_article(title=title, link=x["link"], text=text)
-    site.post()
+    site.post(1)
 
 
 if __name__ == "__main__":

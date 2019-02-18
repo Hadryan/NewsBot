@@ -17,6 +17,7 @@ from telegram.ext import CommandHandler, InlineQueryHandler, Updater
 
 import config
 import database
+from news import Article
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -34,19 +35,16 @@ def help(bot, update):
 
 
 def create_article(title, text, link, img_link, tags, added, alias, name):
+    article = Article(
+        name, title=title, text=text, link=link, img=img_link, tags=tags, date=added
+    )
     return InlineQueryResultArticle(
         id=uuid4(),
         title=title,
         description=text,
         thumb_url=img_link,
         input_message_content=InputTextMessageContent(
-            message_text="*{}*\n_Artikel vom {} Uhr_\n\n{}\n[Foto]({})".format(
-                title,
-                "{2}.{1}.{0} {3}:{4}".format(*re.split(r"[- :]", added)),
-                text,
-                img_link,
-            ),
-            parse_mode=ParseMode.MARKDOWN,
+            message_text=article.create(variant=2), parse_mode=ParseMode.MARKDOWN
         ),
         reply_markup=InlineKeyboardMarkup(
             [
@@ -75,7 +73,7 @@ def inlinequery(bot, update):
         article = db.get_news_by_id(*re.findall("^([a-zA-Z]+)([0-9]+)$", query)[0])
         if article:
             results.append(create_article(*article))
-    else:
+    elif re.findall("^[A-Z0-9a-z]{6,}$", query):
         hashids = Hashids(salt=config.salt, min_length=6)
         news_id = hashids.decode(query)[0]
         results.append(create_article(*db.get_news(news_id)))
