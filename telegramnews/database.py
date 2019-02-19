@@ -4,6 +4,7 @@
 import os
 import sqlite3
 
+
 class Database:
     def __init__(self):
         file = os.path.join(os.path.dirname(__file__), "data.db")
