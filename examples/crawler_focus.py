@@ -29,10 +29,10 @@ def main():
         link = x["link"]
         text = x["summary"]
         text = re.split("\n", text, re.MULTILINE)
-        text = html.unescape(text[-1].split("<br />")[0])
+        text = text[-1].split("<br />")[0]
         img = get_img(link)
         tags = [y["term"] for y in x["tags"]]
-        title = html.unescape(x["title"])
+        title = x["title"]
         site.add_article(title=title, text=text, link=link, img=img, tags=tags)
     site.post()
 

@@ -24,8 +24,8 @@ def main():
     site.base_url = "https://golem.de/"
     site.channel_id = -1001138540100
     for x in feedparser.parse("https://rss.golem.de/rss.php?feed=RSS2.0")["entries"]:
-        text = html.unescape(x["summary"].split("(<a")[0])
-        title = html.unescape(x["title"])
+        text = x["summary"].split("(<a")[0]
+        title = x["title"]
         article_code = requests.get(x["link"]).text
         img = re.findall(
             '"twitter:image" property="og:image" content="([^"]*)"', article_code

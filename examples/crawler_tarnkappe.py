@@ -25,7 +25,7 @@ def main():
 
     raw_data = feedparser.parse(site.base_url + "feed/")
     for x in raw_data["entries"]:
-        text = html.unescape(x["summary"])
+        text = x["summary"]
         sourcecode = requests.get(x["link"]).text
         img = re.findall('<meta property="og:image" content="([^"]*)"', sourcecode)[0]
         tags = [y["term"] for y in x["tags"]]

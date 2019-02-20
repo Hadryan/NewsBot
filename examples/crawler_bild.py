@@ -28,8 +28,8 @@ def main():
         link = x["link"]
         text = x["summary"]
         text = re.split("\n", text, re.MULTILINE)
-        text = html.unescape(text[-1].split("<br />")[0])
-        title = html.unescape(x["title"])
+        text = text[-1].split("<br />")[0]
+        title = x["title"]
         img = (
             x["media_thumbnail"][0]["url"].replace(",w=120,", ",w=1200,")
             if "media_thumbnail" in x

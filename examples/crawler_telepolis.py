@@ -23,8 +23,8 @@ def main():
 
     raw_data = feedparser.parse("https://www.heise.de/tp/news-atom.xml")
     for x in raw_data["entries"]:
-        text = html.unescape(x["summary"])
-        title = html.unescape(x["title"])
+        text = x["summary"]
+        title = x["title"]
         site.add_article(title=title, link=x["link"], text=text)
     site.post(1)
 

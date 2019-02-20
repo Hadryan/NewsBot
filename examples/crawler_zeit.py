@@ -26,21 +26,29 @@ def get_tags(link):
 
 def main():
     site = Site()
-    site.name = "welt_de"
-    site.alias = "Welt.de"
-    site.short = "welt"
-    site.base_url = "https://welt.de/"
+    site.name = "zeitde"
+    site.alias = "Zeit Online"
+    site.short = "zeit"
+    site.base_url = "https://zeit-online.de/"
     site.channel_id = -1001135475495
-    raw_data = feedparser.parse("https://www.welt.de/feeds/latest.rss")
+    raw_data = feedparser.parse("https://newsfeed.zeit.de/index")
     for x in raw_data["entries"]:
-        text = x["summary"]
+        text = x["summary"] if "summary" in x else ""
         title = x["title"]
-        tags = [y["term"] for y in x["tags"]]
-        img = x['links'][1]['href'] if len(x['links']) > 1 and x['links'][1]['type'] == 'image/jpeg' else ""
+        img, tags = get_img_and_tags(x["link"])
         site.add_article(
-            text=text, title=title, link=x["link"], tags=tags, img=img
+            text=text, title=title, link=x["link"], img=img, tags=tags
         )
     site.post()
+
+
+def get_img_and_tags(link):
+    source = requests.get(link).text
+    img = re.findall("property=\"og:image\" *content=\"([^\"]+)\"", source)
+    tags = re.findall("name=\"keywords\" content=\"([^\"]+)\"", source)
+    img = img[0] if img else ""
+    tags = tags[0].split(",") if tags else ""
+    return img, tags
 
 
 if __name__ == "__main__":

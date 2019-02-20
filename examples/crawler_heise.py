@@ -32,8 +32,8 @@ def main():
     site.channel_id = -1001135475495
     raw_data = feedparser.parse("https://www.heise.de/newsticker/heise-atom.xml")
     for x in raw_data["entries"]:
-        text = html.unescape(x["summary"])
-        title = html.unescape(x["title"])
+        text = x["summary"]
+        title = x["title"]
         img = re.findall('<img src="([^"]*)"', x["content"][0]["value"])
         if img:
             img = img[0]

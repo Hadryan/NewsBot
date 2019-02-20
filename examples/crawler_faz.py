@@ -17,27 +17,20 @@ logging.basicConfig(
 )
 
 
-def get_tags(link):
-    sourcecode = requests.get(link).text
-    tags = re.findall('name="keywords" content="([^"]*)"', sourcecode)
-    tags = tags[0].split(",") if tags else tags
-    return tags
-
-
 def main():
     site = Site()
-    site.name = "spiegelde"
-    site.alias = "spiegel-online"
-    site.short = "spiegel"
-    site.base_url = "https://spiegel-online.de/"
+    site.name = "faznet"
+    site.alias = "Frankfurter Allgemeine"
+    site.short = "faz"
+    site.base_url = "https://faz.net/"
     site.channel_id = -1001135475495
-    raw_data = feedparser.parse("http://www.spiegel.de/schlagzeilen/index.rss")
+    raw_data = feedparser.parse("https://www.faz.net/rss/aktuell/")
     for x in raw_data["entries"]:
-        text = x["summary"] if "summary" in x else ""
+        text = html.unescape(re.findall("<p>.*</p>", x["summary"])[0]) if "summary" in x else ""
         title = x["title"]
         img, tags = get_img_and_tags(x["link"])
         site.add_article(
-            text=text, title=title, link=x["link"], tags=tags, img=img
+            text=text, title=title, link=x["link"], img=img, tags=tags
         )
     site.post()
 
@@ -45,7 +38,7 @@ def main():
 def get_img_and_tags(link):
     source = requests.get(link).text
     img = re.findall("property=\"og:image\" *content=\"([^\"]+)\"", source)
-    tags = re.findall("name=\"news_keywords\" content=\"([^\"]+)\"", source)
+    tags = re.findall("name=\"keywords\" content=\"([^\"]+)\"", source)
     img = img[0] if img else ""
     tags = tags[0].split(",") if tags else ""
     return img, tags

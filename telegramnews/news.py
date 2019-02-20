@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
+import html
 import logging
 import re
 from datetime import datetime
@@ -9,9 +8,7 @@ from datetime import datetime
 import pytz
 from hashids import Hashids
 
-from . import config
-from . import database
-from . import telegrambot
+from . import config, database, telegrambot
 from .variants import VERSION_1, VERSION_2, VERSION_3
 
 logging.basicConfig(
@@ -23,7 +20,7 @@ TIMEZONE = "Europe/Berlin"
 
 class Article:
     def __init__(
-        self, site, short="", title="", text="", link="", img="", date="", tags=""
+            self, site, short="", title="", text="", link="", img="", date="", tags=""
     ):
         self.__site = site
         self.__short = short
@@ -46,6 +43,7 @@ class Article:
 
     @title.setter
     def title(self, title):
+        title = html.unescape(title)
         self.__title = self.__check(title)
 
     @property
@@ -58,16 +56,20 @@ class Article:
             else:
                 dot = len(self.__text)
             return (
-                "{}[.]({}){}".format(
-                    self.__text[:dot], self.__img, self.__text[dot + 1 :]
-                )
-                + "\n\n"
+                    "{}[.]({}){}".format(
+                        self.__text[:dot], self.__img, self.__text[dot + 1:]
+                    )
+                    + "\n\n"
             )
         return self.__text + "\n\n"
 
     @text.setter
     def text(self, text):
-        self.__text = self.__check(text)
+        text = html.unescape(text)
+        text = text.replace("_", "\_").replace("*", "\*").replace("`", "\`")
+        text = self.__check(text)
+        text = re.sub("<.*>", "", text)
+        self.__text = re.findall("^ *(.*) *$", text)[0]
 
     @property
     def link(self):
@@ -75,7 +77,7 @@ class Article:
 
     @link.setter
     def link(self, link):
-        self.__link = self.__check(link)
+        self.__link = link
 
     @property
     def img(self):
@@ -83,15 +85,15 @@ class Article:
 
     @img.setter
     def img(self, img):
-        self.__img = self.__check(img)
+        self.__img = img
 
     @property
     def date(self):
         return (
-            pytz.utc.localize(datetime.strptime(self.__date, "%Y-%m-%d %H:%M:%S"))
-            .astimezone(pytz.timezone(TIMEZONE))
-            .strftime("Artikel vom %d.%m.%Y um %H:%M Uhr")
-            + "\n"
+                pytz.utc.localize(datetime.strptime(self.__date, "%Y-%m-%d %H:%M:%S"))
+                .astimezone(pytz.timezone(TIMEZONE))
+                .strftime("Artikel vom %d.%m.%Y um %H:%M Uhr")
+                + "\n"
         )
 
     @date.setter
@@ -108,29 +110,28 @@ class Article:
 
     @tags.setter
     def tags(self, tags):
+        tags = [html.unescape(tag) for tag in tags]
         self.__tags = self.__clean_tags(tags)
 
     def __check(self, value):
-        purge = [
-            "<br />",
-            "<B>",
-            "<B/>",
-            "<p>",
-            "</p>",
-            "<p/>",
-            "</strong>",
-            "<strong>",
-        ]
-        if value:
-            for expr in purge:
-                value = value.replace(expr, "")
+        value = re.sub("<[^<]*>", "", value)
         return value
 
     def __clean_tags(self, tags):
-        purge = ["-", " ", ".", "&", "'", "/", "@", "#"]
+        add = []
+        for idx, tag in enumerate(tags):
+            bracket = re.findall("(\(.*\))", tag)
+            if bracket:
+                tags[idx] = re.sub("\(.*\)", "", tag)
+                add += re.findall("\((.*)\)", tag)
+        tags += add
+        purge = "- .'/@\"?„“:~`!$^*+=\\|{}[];<>,"
+        replace = {"+": "plus", "§": "Paragraph", "&": "und", "#": "Hashtag", "%":"Prozent"}
         for char in purge:
             tags = [tag.replace(char, "") for tag in tags]
-        return tags
+        for char, value in replace.items():
+            tags = [tag.replace(char, value) for tag in tags]
+        return [tag.replace("_", "\_") for tag in tags]
 
     @property
     def share_link(self):
