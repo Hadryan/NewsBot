@@ -5,6 +5,7 @@
 import logging
 import time
 from _datetime import datetime
+from pprint import pprint
 
 from telegram.bot import Bot
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
@@ -83,6 +84,9 @@ class Telegram:
 
     def send(self, msg, channel_id, keyboard):
         try:
+            if config.debug == "text":
+                pprint(msg+ str(keyboard))
+                return 0
             msg_id = self.__bot.sendMessage(
                 text=msg,
                 chat_id=channel_id,
