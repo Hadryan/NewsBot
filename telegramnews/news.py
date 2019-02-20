@@ -50,7 +50,7 @@ class Article:
     def text(self):
         if not self.__text:
             return ""
-        if self.__img and not self.__share_link:
+        if self.__img and not self.__share_link and not self.__variant in [4]:
             if "." in self.__text:
                 dot = self.__text.rindex(".")
             else:
@@ -144,7 +144,11 @@ class Article:
         db = database.Database()
         probably_msg_id = db.get_max_message_id(self.__site)
         probably_msg_id = int(probably_msg_id if probably_msg_id else 0) + 1
-        arrow = "[👉]({})".format(self.__img) if self.__img else "👉"
+        arrow = (
+            "[👉]({})".format(self.__img)
+            if self.__img and not self.__variant in [4]
+            else "👉"
+        )
         share = "Teilen {}".format(arrow)
         if self.__share_link == 1:
             return "{}`t.me/{}/{}`".format(share, self.__site, probably_msg_id)
@@ -176,7 +180,7 @@ class Article:
     def create(self, variant=0, share_link=0):
         self.__variant = variant
         self.__share_link = share_link
-        if variant in [0, 3]:
+        if variant in [0, 3, 4]:
             return (
                 VERSION_1.format(
                     title=self.title,
@@ -184,7 +188,7 @@ class Article:
                     tags=self.tags,
                     share=self.share_link,
                 ),
-                {"link": self.link},
+                {"magazine" if self.link[-3:] == "pdf" else "link": self.link},
             )
         elif variant == 1:
             return (VERSION_2.format(title=self.title, link=self.link), {})
@@ -196,8 +200,10 @@ class Article:
             return
         tg = telegrambot.Telegram()
         text, buttons = self.create(variant=variant, share_link=share_link)
-        msg_id = tg.send(
-            text, channel_id if not config.debug else config.owner, buttons
-        )
+        channel_id = channel_id if not config.debug else config.owner
+        if self.__variant == 4:
+            msg_id = tg.send_img(text, channel_id, buttons, self.img)
+        else:
+            msg_id = tg.send(text, buttons)
         if msg_id:
             db.update_message_id(self.__id, msg_id)

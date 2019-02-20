@@ -7,6 +7,7 @@ import time
 from _datetime import datetime
 from pprint import pprint
 
+
 from telegram.bot import Bot
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
@@ -23,75 +24,43 @@ class Telegram:
     def __init__(self):
         self.__bot = Bot(config.bot_token)
 
-    def __get_keyboard(self, link, hash):
-        keyboard = [
-            [
-                InlineKeyboardButton("Artikel lesen ↗️", url=link),
-                InlineKeyboardButton("Teilen 🗣", switch_inline_query=hash),
-            ]
-        ]
-        return InlineKeyboardMarkup(keyboard)
-
-    def __get_keyboard_new(self, buttons):
+    def __get_keyboard(self, buttons):
         keyboard = []
         if "link" in buttons:
             keyboard.append(
                 [InlineKeyboardButton("Artikel lesen ↗️", url=buttons["link"])]
             )
+        if "magazine" in buttons:
+            keyboard.append(
+                [InlineKeyboardButton("Ausgabe lesen ↗️", url=buttons["magazine"])]
+            )
         return InlineKeyboardMarkup(keyboard)
 
-    def send_var1(self, title, text, link, hash, img, channel_id, date=None):
-        add = "_" + datetime.strftime(date, "%d.%m.%Y %H:%M") + "_\n" if date else ""
-        msg = "*" + title + "*\n\n" + add + text[:-1] + "[.](" + img + ")"
+    def send_img(self, msg, channel_id, keyboard, img):
         try:
-            self.__bot.sendMessage(
-                text=msg,
+
+            msg_id = self.__bot.send_photo(
+                caption=msg,
+                photo=img if img[:4] == "http" else open(img, "rb"),
                 chat_id=channel_id,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=self.__get_keyboard(link, hash),
+                reply_markup=self.__get_keyboard(keyboard),
             )
         except Exception as e:
             logging.exception(e)
-        time.sleep(5)
-
-    def send_var2(self, data, probably_msg_id):
-        msg = "*{}*\n{}\n\n{}".format(data["title"], data["tags"], data["text"])
-        arrow = "[👉](" + data["img"] + ")" if data["img"] else "👉"
-        msg = "{}\n\n Teilen {} `t.me/{}/{}`".format(
-            msg, arrow, data["site"], probably_msg_id
-        )
-        try:
-            msg_id = self.__bot.sendMessage(
-                text=msg,
-                chat_id=data["channel"],
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=self.__get_keyboard(data["link"], data["hash"]),
-            )["message_id"]
-        except Exception as e:
-            logging.exception(e)
-            msg_id = False
+            msg_id = 0
         return msg_id
 
-    def send_instant(self, title, link, channel_id):
-        msg = "[" + title + "](" + link + ")"
+    def send(self, msg, channel_id, buttons):
+        if config.debug == "text":
+            pprint(msg + str(buttons))
+            return 0
         try:
-            self.__bot.sendMessage(
-                text=msg, chat_id=channel_id, parse_mode=ParseMode.MARKDOWN
-            )
-        except Exception as e:
-            logging.exception(e)
-        time.sleep(10)
-
-    def send(self, msg, channel_id, keyboard):
-        try:
-            if config.debug == "text":
-                pprint(msg+ str(keyboard))
-                return 0
             msg_id = self.__bot.sendMessage(
                 text=msg,
                 chat_id=channel_id,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=self.__get_keyboard_new(keyboard),
+                reply_markup=self.__get_keyboard(buttons),
             )["message_id"]
         except Exception as e:
             logging.exception(e)

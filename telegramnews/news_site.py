@@ -1,3 +1,6 @@
+import re
+
+from telegramnews.database import Database
 from . import database
 from . import news
 from . import telegrambot
@@ -59,6 +62,12 @@ class Site:
     def channel_id(self, channel_id):
         self.__channel_id = channel_id
         self.check_site()
+
+    def check_article_exists(self, link):
+        db = Database()
+        return db.check_news(link) or db.check_news(
+            re.findall(r"https?://[\-\w.]*/(.*)$", link)[0]
+        )
 
     def check_site(self):
         if not (self.__short or self.__alias or self.__base_url or self.__name):
