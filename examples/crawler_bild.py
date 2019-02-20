@@ -25,18 +25,18 @@ def main():
     for x in feedparser.parse(
         "http://www.bild.de/rssfeeds/vw-news/vw-news-16726644,sort=1,view=rss2.bild.xml"
     )["entries"]:
-        link = x["link"]
         text = x["summary"]
         text = re.split("\n", text, re.MULTILINE)
         text = text[-1].split("<br />")[0]
-        title = x["title"]
         img = (
             x["media_thumbnail"][0]["url"].replace(",w=120,", ",w=1200,")
             if "media_thumbnail" in x
             else None
         )
         tags = [y["term"] for y in x["tags"]]
-        site.add_article(title=title, text=text, link=link, img=img, tags=tags)
+        site.add_article(
+            title=x["title"], text=text, link=x["link"], img=img, tags=tags
+        )
     site.post()
 
 

@@ -26,14 +26,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def start(bot, update):
-    update.message.reply_text("Hi!")
-
-
-def help(bot, update):
-    update.message.reply_text("Help!")
-
-
 def create_article(title, text, link, img_link, tags, added, alias, name):
     article = Article(
         name, title=title, text=text, link=link, img=img_link, tags=tags, date=added
@@ -80,19 +72,12 @@ def inlinequery(bot, update):
     update.inline_query.answer(results)
 
 
-def error(bot, update, error):
-    logger.warning('Update "%s" caused error "%s"', update, error)
-
-
 def run():
     updater = Updater(config.bot_token)
 
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
     dp.add_handler(InlineQueryHandler(inlinequery))
-    dp.add_error_handler(error)
 
     updater.start_polling()
     updater.idle()

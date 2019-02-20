@@ -25,13 +25,14 @@ def main():
     site.channel_id = -1001138540100
     for x in feedparser.parse("https://rss.golem.de/rss.php?feed=RSS2.0")["entries"]:
         text = x["summary"].split("(<a")[0]
-        title = x["title"]
         article_code = requests.get(x["link"]).text
         img = re.findall(
             '"twitter:image" property="og:image" content="([^"]*)"', article_code
         )[0]
         tags = re.findall('a href="[^"]*">([^<]*)<', html.unescape(x["summary"]))
-        site.add_article(text=text, title=title, img=img, tags=tags, link=x["link"])
+        site.add_article(
+            text=text, title=x["title"], img=img, tags=tags, link=x["link"]
+        )
     site.post()
 
 

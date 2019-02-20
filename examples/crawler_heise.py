@@ -32,15 +32,17 @@ def main():
     site.channel_id = -1001135475495
     raw_data = feedparser.parse("https://www.heise.de/newsticker/heise-atom.xml")
     for x in raw_data["entries"]:
-        text = x["summary"]
-        title = x["title"]
         img = re.findall('<img src="([^"]*)"', x["content"][0]["value"])
         if img:
             img = img[0]
             img = re.sub("scale/geometry/([^/]*)/", "scale/geometry/720/", img)
         tags = get_tags(x["link"])
         site.add_article(
-            text=text, title=title, link=x["link"], img=img if img else "", tags=tags
+            text=x["summary"],
+            title=x["title"],
+            link=x["link"],
+            img=img if img else "",
+            tags=tags,
         )
     site.post()
 

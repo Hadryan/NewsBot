@@ -33,12 +33,14 @@ def main():
     site.channel_id = -1001135475495
     raw_data = feedparser.parse("https://www.welt.de/feeds/latest.rss")
     for x in raw_data["entries"]:
-        text = x["summary"]
-        title = x["title"]
         tags = [y["term"] for y in x["tags"]]
-        img = x['links'][1]['href'] if len(x['links']) > 1 and x['links'][1]['type'] == 'image/jpeg' else ""
+        img = (
+            x["links"][1]["href"]
+            if len(x["links"]) > 1 and x["links"][1]["type"] == "image/jpeg"
+            else ""
+        )
         site.add_article(
-            text=text, title=title, link=x["link"], tags=tags, img=img
+            text=x["summary"], title=x["title"], link=x["link"], tags=tags, img=img
         )
     site.post()
 

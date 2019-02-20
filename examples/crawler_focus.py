@@ -32,8 +32,7 @@ def main():
         text = text[-1].split("<br />")[0]
         img = get_img(link)
         tags = [y["term"] for y in x["tags"]]
-        title = x["title"]
-        site.add_article(title=title, text=text, link=link, img=img, tags=tags)
+        site.add_article(title=x["title"], text=text, link=link, img=img, tags=tags)
     site.post()
 
 

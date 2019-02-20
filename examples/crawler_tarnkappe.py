@@ -25,12 +25,11 @@ def main():
 
     raw_data = feedparser.parse(site.base_url + "feed/")
     for x in raw_data["entries"]:
-        text = x["summary"]
         sourcecode = requests.get(x["link"]).text
         img = re.findall('<meta property="og:image" content="([^"]*)"', sourcecode)[0]
         tags = [y["term"] for y in x["tags"]]
         site.add_article(
-            link=x["link"], title=x["title"], text=text, img=img, tags=tags
+            link=x["link"], title=x["title"], text=x["summary"], img=img, tags=tags
         )
     site.post()
 

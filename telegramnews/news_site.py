@@ -96,36 +96,3 @@ class Site:
     def post(self, variant=0, share_link=2):
         for article in self.__articles[::-1]:
             article.send(self.__db, self.channel_id, variant, share_link=share_link)
-
-    def __send_une(self):
-        tg.send_var1(
-            self.__title,
-            self.__text,
-            self.__link,
-            self.__hash,
-            self.__img,
-            self.__channel,
-            date=self.__date,
-        )
-
-    def __send_deux(self):
-        db = database.Database()
-        tg = telegrambot.Telegram()
-        probably_msg_id = db.get_max_message_id(self.__site)
-        probably_msg_id = int(probably_msg_id if probably_msg_id else 0) + 1
-        self.__msg_id = tg.send_var2(self._get_data(), probably_msg_id)
-        if self.__msg_id:
-            db.update_message_id(self.__id, self.__msg_id)
-
-    def __send_trois(self):
-        tg = telegrambot.Telegram()
-        tg.send_instant(self.__title, self.__link, self.__channel)
-
-    # def post(self):
-    ##    if self.__insert_db():
-    #        if self.__variante == 1:
-    #            self.__send_une()
-    ##        elif self.__variante == 2:
-    #           self.__send_deux()
-    #       elif self.__variante == 3:
-    #           self.__send_trois()
