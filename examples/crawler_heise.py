@@ -38,6 +38,8 @@ def main():
     site.join_instant = "http://t.me/joinchat/AAAAAE6SJpsh3C0EnOD5hw"
     raw_data = feedparser.parse("https://www.heise.de/newsticker/heise-atom.xml")
     for x in raw_data["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         img = re.findall('<img src="([^"]*)"', x["content"][0]["value"])
         if img:
             img = img[0]

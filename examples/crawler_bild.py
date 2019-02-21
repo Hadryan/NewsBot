@@ -29,6 +29,8 @@ def main():
     for x in feedparser.parse(
         "http://www.bild.de/rssfeeds/vw-news/vw-news-16726644,sort=1,view=rss2.bild.xml"
     )["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         text = x["summary"]
         text = re.split("\n", text, re.MULTILINE)
         text = text[-1].split("<br />")[0]

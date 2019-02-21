@@ -30,6 +30,8 @@ def main():
 
     raw_data = feedparser.parse(site.base_url + "feed/")
     for x in raw_data["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         sourcecode = requests.get(x["link"]).text
         img = re.findall('<meta property="og:image" content="([^"]*)"', sourcecode)[0]
         tags = [y["term"] for y in x["tags"]]

@@ -30,6 +30,8 @@ def main():
     site.join_instant = "http://t.me/joinchat/AAAAAFDKitrF93gyfjCUeg"
     raw_data = feedparser.parse("https://newsfeed.zeit.de/index")
     for x in raw_data["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         img, tags = get_img_and_tags(x["link"])
         site.add_article(
             text=x["summary"], title=x["title"], link=x["link"], img=img, tags=tags

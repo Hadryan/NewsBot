@@ -20,7 +20,16 @@ TIMEZONE = "Europe/Berlin"
 
 class Article:
     def __init__(
-        self, site, short="", title="", alias="", text="", link="", img="", date="", tags=""
+        self,
+        site,
+        short="",
+        title="",
+        alias="",
+        text="",
+        link="",
+        img="",
+        date="",
+        tags="",
     ):
         self.__site = site
         self.__short = short
@@ -196,7 +205,9 @@ class Article:
         elif variant == 2:
             return VERSION_3.format(title=self.title, text=self.text, date=self.date)
         elif variant == 5:
-            return VERSION_4.format(title=self.title, link=self.link, alias=self.__alias, iv=instant[1])
+            return VERSION_4.format(
+                title=self.title, link=self.link, alias=self.__alias, iv=instant[1]
+            )
 
     def send(self, db, channel_id, variant, share_link=2, instant=None):
         if not self.__insert_db(db):

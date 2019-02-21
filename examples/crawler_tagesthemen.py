@@ -46,6 +46,8 @@ def main():
             "http://blog.ard-hauptstadtstudio.de",
         ]:
             continue
+        if site.check_article_exists(x["link"]):
+            continue
         img, tags = get_img_and_tags(x["link"])
         site.add_article(
             text=x["summary"], title=x["title"], link=x["link"], tags=tags, img=img

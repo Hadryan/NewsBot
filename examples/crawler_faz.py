@@ -30,6 +30,8 @@ def main():
     site.join_instant = "http://t.me/joinchat/AAAAAFUU2Ajt-w9K9ipIoQ"
     raw_data = feedparser.parse("https://www.faz.net/rss/aktuell/")
     for x in raw_data["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         text = (
             html.unescape(re.findall("<p>.*</p>", x["summary"])[0])
             if "summary" in x

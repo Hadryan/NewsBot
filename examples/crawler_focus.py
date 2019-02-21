@@ -31,6 +31,8 @@ def main():
     for x in feedparser.parse(
         "https://rss.focus.de/fol/XML/rss_folnews_eilmeldungen.xml"
     )["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         link = x["link"]
         text = x["summary"]
         text = re.split("\n", text, re.MULTILINE)

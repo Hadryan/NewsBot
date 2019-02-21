@@ -37,6 +37,8 @@ def main():
     site.join_instant = "http://t.me/joinchat/AAAAAEaUWvabMwWbupISFw"
     raw_data = feedparser.parse("https://www.welt.de/feeds/latest.rss")
     for x in raw_data["entries"]:
+        if site.check_article_exists(x["link"]):
+            continue
         tags = [y["term"] for y in x["tags"]]
         img = (
             x["links"][1]["href"]
