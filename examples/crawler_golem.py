@@ -27,6 +27,8 @@ def main():
     site.short = "golem"
     site.base_url = "https://golem.de/"
     site.channel_id = -1001138540100
+    site.instant_id = -1001304871255
+    site.join_instant = "http://t.me/joinchat/AAAAAE3GwVcigPpRU96awA"
     for x in feedparser.parse("https://rss.golem.de/rss.php?feed=RSS2.0")["entries"]:
         text = x["summary"].split("(<a")[0]
         article_code = requests.get(x["link"]).text

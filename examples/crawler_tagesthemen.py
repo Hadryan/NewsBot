@@ -37,6 +37,8 @@ def main():
     site.short = "tages"
     site.base_url = "https://www.tagesschau.de/xml/rss2"
     site.channel_id = -1001151817211
+    site.instant_id = -1001450868426
+    site.join_instant = "http://t.me/joinchat/AAAAAFZ6fsojLN6G1q2rmA"
     raw_data = feedparser.parse("https://www.tagesschau.de/xml/atom/")
     for x in raw_data["entries"]:
         if x["link"] in [

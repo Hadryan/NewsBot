@@ -26,6 +26,8 @@ def main():
     site.short = "faz"
     site.base_url = "https://faz.net/"
     site.channel_id = -1001430790847
+    site.instant_id = -1001427429384
+    site.join_instant = "http://t.me/joinchat/AAAAAFUU2Ajt-w9K9ipIoQ"
     raw_data = feedparser.parse("https://www.faz.net/rss/aktuell/")
     for x in raw_data["entries"]:
         text = (

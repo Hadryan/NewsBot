@@ -27,6 +27,8 @@ def main():
     site.short = "spiegel"
     site.base_url = "https://spiegel-online.de/"
     site.channel_id = -1001442405890
+    site.instant_id = -1001182811341
+    site.join_instant = "http://t.me/joinchat/AAAAAEaARM11yh3ZtMJGXQ"
     raw_data = feedparser.parse("http://www.spiegel.de/schlagzeilen/index.rss")
     for x in raw_data["entries"]:
         img, tags = get_img_and_tags(x["link"])

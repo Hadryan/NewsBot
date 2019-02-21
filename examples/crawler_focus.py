@@ -22,10 +22,12 @@ logging.basicConfig(
 def main():
     site = Site()
     site.name = "focus_online"
-    site.alias = "FOCUS Online"
+    site.alias = "Focus Online"
     site.short = "focus"
     site.base_url = "https://www.focus.de/"
     site.channel_id = -1001358620859
+    site.instant_id = -1001479434546
+    site.join_instant = "https://t.me/joinchat/AAAAAFguYTI39BV7VxK9qQ"
     for x in feedparser.parse(
         "https://rss.focus.de/fol/XML/rss_folnews_eilmeldungen.xml"
     )["entries"]:

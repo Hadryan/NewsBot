@@ -26,6 +26,8 @@ def main():
     site.short = "zeit"
     site.base_url = "https://zeit-online.de/"
     site.channel_id = -1001497423999
+    site.instant_id = -1001355451098
+    site.join_instant = "http://t.me/joinchat/AAAAAFDKitrF93gyfjCUeg"
     raw_data = feedparser.parse("https://newsfeed.zeit.de/index")
     for x in raw_data["entries"]:
         img, tags = get_img_and_tags(x["link"])

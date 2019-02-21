@@ -33,6 +33,8 @@ def main():
     site.short = "welt"
     site.base_url = "https://welt.de/"
     site.channel_id = -1001247567899
+    site.instant_id = -1001184127734
+    site.join_instant = "http://t.me/joinchat/AAAAAEaUWvabMwWbupISFw"
     raw_data = feedparser.parse("https://www.welt.de/feeds/latest.rss")
     for x in raw_data["entries"]:
         tags = [y["term"] for y in x["tags"]]

@@ -23,6 +23,8 @@ def main():
     site.alias = "Telepolis.de"
     site.base_url = "https://heise.de/tp"
     site.channel_id = -1001128692603
+    site.instant_id = -1001342689984
+    site.join_instant = "http://t.me/joinchat/AAAAAFAH0sBMP7A7NMf0xw"
 
     raw_data = feedparser.parse("https://www.heise.de/tp/news-atom.xml")
     for x in raw_data["entries"]:

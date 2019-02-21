@@ -34,6 +34,8 @@ def main():
     site.short = "heise"
     site.base_url = "https://heise.de/"
     site.channel_id = -1001135475495
+    site.instant_id = -1001318200987
+    site.join_instant = "http://t.me/joinchat/AAAAAE6SJpsh3C0EnOD5hw"
     raw_data = feedparser.parse("https://www.heise.de/newsticker/heise-atom.xml")
     for x in raw_data["entries"]:
         img = re.findall('<img src="([^"]*)"', x["content"][0]["value"])

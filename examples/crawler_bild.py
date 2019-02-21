@@ -24,6 +24,8 @@ def main():
     site.short = "bild"
     site.base_url = "http://www.bild.de/"
     site.channel_id = -1001142790377
+    site.instant_id = -1001458030907
+    site.join_instant = "http://t.me/joinchat/AAAAAFbnyTtakCsqpHNi8g"
     for x in feedparser.parse(
         "http://www.bild.de/rssfeeds/vw-news/vw-news-16726644,sort=1,view=rss2.bild.xml"
     )["entries"]:

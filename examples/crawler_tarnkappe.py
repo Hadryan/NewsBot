@@ -25,6 +25,8 @@ def main():
     site.alias = "Tarnkappe.info"
     site.base_url = "https://tarnkappe.info/"
     site.channel_id = -1001096556431
+    site.instant_id = -1001201795584
+    site.join_instant = "http://t.me/joinchat/AAAAAEeh8gAMwazWu2hoTA"
 
     raw_data = feedparser.parse(site.base_url + "feed/")
     for x in raw_data["entries"]:

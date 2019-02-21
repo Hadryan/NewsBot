@@ -1,18 +1,18 @@
 import re
 
 from telegramnews.database import Database
-from . import database
-from . import news
-from . import telegrambot
+from . import database, news
 
 
 class Site:
-    def __init__(self, name="", alias="", short="", base_url="", channel_id=0):
+    def __init__(self, name="", alias="", short="", base_url="", channel_id=0, instant_id=0, join_instant=""):
         self.__name = name
         self.__alias = alias
         self.__short = short
         self.__base_url = base_url
         self.__channel_id = channel_id
+        self.__instant_id = instant_id
+        self.__join_instant = join_instant
         self.__db = database.Database()
         self.__articles = []
         self.check_site()
@@ -63,6 +63,24 @@ class Site:
         self.__channel_id = channel_id
         self.check_site()
 
+    @property
+    def instant_id(self):
+        return self.__instant_id
+
+    @instant_id.setter
+    def instant_id(self, instant_id):
+        self.__instant_id = instant_id
+        self.check_site()
+
+    @property
+    def join_instant(self):
+        return self.__join_instant
+
+    @join_instant.setter
+    def join_instant(self, join_instant):
+        self.__join_instant = join_instant
+        self.check_site()
+
     def check_article_exists(self, link):
         db = Database()
         return db.check_news(link) or db.check_news(
@@ -85,9 +103,9 @@ class Site:
             self.__db.insert_channel(self.__name, self.__channel_id)
 
     def add_article(
-        self, title="", text="", img="", link="", tags: list = None, date=""
+            self, title="", text="", img="", link="", tags: list = None, date=""
     ):
-        n = news.Article(self.name, short=self.short)
+        n = news.Article(self.name, short=self.short, alias=self.alias)
         if title:
             n.title = title
         if text:
@@ -104,4 +122,5 @@ class Site:
 
     def post(self, variant=0, share_link=2):
         for article in self.__articles[::-1]:
-            article.send(self.__db, self.channel_id, variant, share_link=share_link)
+            article.send(self.__db, self.channel_id, variant, share_link=share_link, instant=[self.instant_id,
+                                                                                              self.join_instant])

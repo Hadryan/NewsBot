@@ -9,7 +9,7 @@ import pytz
 from hashids import Hashids
 
 from . import config, database, telegrambot
-from .variants import VERSION_1, VERSION_2, VERSION_3
+from .variants import VERSION_1, VERSION_2, VERSION_3, VERSION_4
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -20,10 +20,11 @@ TIMEZONE = "Europe/Berlin"
 
 class Article:
     def __init__(
-        self, site, short="", title="", text="", link="", img="", date="", tags=""
+        self, site, short="", title="", alias="", text="", link="", img="", date="", tags=""
     ):
         self.__site = site
         self.__short = short
+        self.__alias = alias
         self.__title = title
         self.__text = text
         self.__link = link
@@ -177,7 +178,7 @@ class Article:
             return True
         return False
 
-    def create(self, variant=0, share_link=0):
+    def create(self, variant=0, share_link=0, instant=None):
         self.__variant = variant
         self.__share_link = share_link
         if variant in [0, 3, 4]:
@@ -194,8 +195,10 @@ class Article:
             return (VERSION_2.format(title=self.title, link=self.link), {})
         elif variant == 2:
             return VERSION_3.format(title=self.title, text=self.text, date=self.date)
+        elif variant == 5:
+            return VERSION_4.format(title=self.title, link=self.link, alias=self.__alias, iv=instant[1])
 
-    def send(self, db, channel_id, variant, share_link=2):
+    def send(self, db, channel_id, variant, share_link=2, instant=None):
         if not self.__insert_db(db):
             return
         tg = telegrambot.Telegram()
@@ -205,5 +208,8 @@ class Article:
             msg_id = tg.send_img(text, channel_id, buttons, self.img)
         else:
             msg_id = tg.send(text, channel_id, buttons)
+        if instant and instant[0]:
+            instant_id = instant[0] if not config.debug else config.owner
+            tg.send(self.create(5, instant=instant), instant_id, {})
         if msg_id:
             db.update_message_id(self.__id, msg_id)
