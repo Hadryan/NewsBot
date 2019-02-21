@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+import sys
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 
 import html
 import logging
 import re
-from pprint import pprint
 
 import feedparser
 import requests
 
-from telegramnews import Site
+from telegramnews.news_site import Site
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -19,11 +21,11 @@ logging.basicConfig(
 
 def main():
     site = Site()
-    site.name = "faznet"
+    site.name = "faz_net"
     site.alias = "Frankfurter Allgemeine"
     site.short = "faz"
     site.base_url = "https://faz.net/"
-    site.channel_id = -1001135475495
+    site.channel_id = -1001430790847
     raw_data = feedparser.parse("https://www.faz.net/rss/aktuell/")
     for x in raw_data["entries"]:
         text = (

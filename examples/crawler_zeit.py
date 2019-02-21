@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 import logging
 import re
 
@@ -21,7 +25,7 @@ def main():
     site.alias = "Zeit Online"
     site.short = "zeit"
     site.base_url = "https://zeit-online.de/"
-    site.channel_id = -1001135475495
+    site.channel_id = -1001497423999
     raw_data = feedparser.parse("https://newsfeed.zeit.de/index")
     for x in raw_data["entries"]:
         img, tags = get_img_and_tags(x["link"])

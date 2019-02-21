@@ -45,6 +45,7 @@ class Telegram:
                 chat_id=channel_id,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=self.__get_keyboard(keyboard),
+                timeout=60,
             )
         except Exception as e:
             logging.exception(e)
@@ -61,6 +62,7 @@ class Telegram:
                 chat_id=channel_id,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=self.__get_keyboard(buttons),
+                timeout=60,
             )["message_id"]
         except Exception as e:
             logging.exception(e)

@@ -204,6 +204,6 @@ class Article:
         if self.__variant == 4:
             msg_id = tg.send_img(text, channel_id, buttons, self.img)
         else:
-            msg_id = tg.send(text, buttons)
+            msg_id = tg.send(text, channel_id, buttons)
         if msg_id:
             db.update_message_id(self.__id, msg_id)

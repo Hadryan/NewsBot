@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
-import html
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 import logging
 
 import feedparser

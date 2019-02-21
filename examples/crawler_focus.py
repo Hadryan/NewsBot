@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import sys
 
-import html
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
+
 import logging
 import re
 
@@ -22,7 +25,7 @@ def main():
     site.alias = "FOCUS Online"
     site.short = "focus"
     site.base_url = "https://www.focus.de/"
-    site.channel_id = -1001317811798
+    site.channel_id = -1001358620859
     for x in feedparser.parse(
         "https://rss.focus.de/fol/XML/rss_folnews_eilmeldungen.xml"
     )["entries"]:

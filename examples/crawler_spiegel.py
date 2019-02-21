@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
-import html
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
+
 import logging
 import re
-from pprint import pprint
 
 import feedparser
 import requests
@@ -23,7 +26,7 @@ def main():
     site.alias = "spiegel-online"
     site.short = "spiegel"
     site.base_url = "https://spiegel-online.de/"
-    site.channel_id = -1001135475495
+    site.channel_id = -1001442405890
     raw_data = feedparser.parse("http://www.spiegel.de/schlagzeilen/index.rss")
     for x in raw_data["entries"]:
         img, tags = get_img_and_tags(x["link"])

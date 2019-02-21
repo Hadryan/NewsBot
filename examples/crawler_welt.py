@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-import html
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "../"))
 import logging
 import re
-from pprint import pprint
 
 import feedparser
 import requests
@@ -30,7 +32,7 @@ def main():
     site.alias = "Welt.de"
     site.short = "welt"
     site.base_url = "https://welt.de/"
-    site.channel_id = -1001135475495
+    site.channel_id = -1001247567899
     raw_data = feedparser.parse("https://www.welt.de/feeds/latest.rss")
     for x in raw_data["entries"]:
         tags = [y["term"] for y in x["tags"]]
