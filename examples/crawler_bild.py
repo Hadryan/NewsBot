@@ -31,9 +31,11 @@ def main():
     )["entries"]:
         if site.check_article_exists(x["link"]):
             continue
-        text = x["summary"]
-        text = re.split("\n", text, re.MULTILINE)
-        text = text[-1].split("<br />")[0]
+        text = ""
+        if "summary" in x:
+            text = x["summary"]
+            text = re.split("\n", text, re.MULTILINE)
+            text = text[-1].split("<br />")[0]
         img = (
             x["media_thumbnail"][0]["url"].replace(",w=120,", ",w=1200,")
             if "media_thumbnail" in x

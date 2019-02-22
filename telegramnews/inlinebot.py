@@ -13,10 +13,9 @@ from telegram import (
     InputTextMessageContent,
     ParseMode,
 )
-from telegram.ext import CommandHandler, InlineQueryHandler, Updater
+from telegram.ext import InlineQueryHandler, Updater
 
-from . import config
-from . import database
+from . import config, database
 from .news import Article
 
 logging.basicConfig(
@@ -43,7 +42,7 @@ def create_article(title, text, link, img_link, tags, added, alias, name):
                 [
                     InlineKeyboardButton(text="Artikel lesen ↗️", url=link),
                     InlineKeyboardButton(
-                        text="Mehr {}".format(alias), url="https://t.me/" + name
+                        text="Mehr {}".format(alias), url="https://t.me/" + name if not name[:4] == 'http' else name
                     ),
                 ]
             ]

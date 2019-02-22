@@ -21,7 +21,7 @@ logging.basicConfig(
 
 def main():
     site = Site()
-    site.name = "zeitde"
+    site.name = "zeit_de"
     site.alias = "Zeit Online"
     site.short = "zeit"
     site.base_url = "https://zeit-online.de/"

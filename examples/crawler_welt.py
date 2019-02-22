@@ -45,8 +45,9 @@ def main():
             if len(x["links"]) > 1 and x["links"][1]["type"] == "image/jpeg"
             else ""
         )
+        text = x["summary"] if "summary" in x else ""
         site.add_article(
-            text=x["summary"], title=x["title"], link=x["link"], tags=tags, img=img
+            text=text, title=x["title"], link=x["link"], tags=tags, img=img
         )
     site.post()
 

@@ -22,7 +22,7 @@ logging.basicConfig(
 
 def main():
     site = Site()
-    site.name = "spiegelde"
+    site.name = "spiegel_online_de"
     site.alias = "spiegel-online"
     site.short = "spiegel"
     site.base_url = "https://spiegel-online.de/"

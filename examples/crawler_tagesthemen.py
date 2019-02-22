@@ -32,7 +32,7 @@ def get_img_and_tags(link):
 
 def main():
     site = Site()
-    site.name = "tagesschau"
+    site.name = "tagesthemen_de"
     site.alias = "tagesschau.de"
     site.short = "tages"
     site.base_url = "https://www.tagesschau.de/xml/rss2"

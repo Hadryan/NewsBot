@@ -21,7 +21,7 @@ logging.basicConfig(
 
 def main():
     site = Site()
-    site.name = "focus_online"
+    site.name = "focus_de"
     site.alias = "Focus Online"
     site.short = "focus"
     site.base_url = "https://www.focus.de/"

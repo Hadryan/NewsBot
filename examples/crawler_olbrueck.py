@@ -48,7 +48,7 @@ def get_newspaper(site, week=0):
 
 def main():
     site = Site()
-    site.name = "obrueck"
+    site.name = "olbrueck"
     site.alias = "Olbrück Rundschau"
     site.base_url = "https://archiv.wittich.de/epapers/pdf/3"
     site.short = "olbrück"
