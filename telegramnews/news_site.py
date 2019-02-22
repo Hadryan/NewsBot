@@ -12,16 +12,15 @@ class Site:
         short="",
         base_url="",
         channel_id=0,
-        instant_id=0,
-        join_instant="",
     ):
         self.__name = name
         self.__alias = alias
         self.__short = short
         self.__base_url = base_url
         self.__channel_id = channel_id
-        self.__instant_id = instant_id
-        self.__join_instant = join_instant
+        self.__instant_id = 0
+        self.__join_instant = ""
+        self.__instant_hash = ""
         self.__db = database.Database()
         self.__articles = []
         self.check_site()
@@ -90,6 +89,16 @@ class Site:
         self.__join_instant = join_instant
         self.check_site()
 
+
+    @property
+    def instant_hash(self):
+        return self.__instant_hash
+
+    @instant_hash.setter
+    def instant_hash(self, instant_hash):
+        self.__instant_hash = instant_hash
+        self.check_site()
+
     def check_article_exists(self, link):
         db = Database()
         return db.check_news(link) or db.check_news(
@@ -136,5 +145,5 @@ class Site:
                 self.channel_id,
                 variant,
                 share_link=share_link,
-                instant=[self.instant_id, self.join_instant],
+                instant=[self.instant_id, self.join_instant, self.instant_hash],
             )

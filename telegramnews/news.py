@@ -205,8 +205,9 @@ class Article:
         elif variant == 2:
             return VERSION_3.format(title=self.title, text=self.text, date=self.date)
         elif variant == 5:
+            instant_link, instant_join = instant
             return VERSION_4.format(
-                title=self.title, link=self.link, alias=self.__alias, iv=instant[1]
+                title=self.title, link=instant_link, alias=self.__alias, iv=instant_join
             )
 
     def send(self, db, channel_id, variant, share_link=2, instant=None):
@@ -221,6 +222,7 @@ class Article:
             msg_id = tg.send(text, channel_id, buttons)
         if instant and instant[0]:
             instant_id = instant[0] if not config.debug else config.owner
-            tg.send(self.create(5, instant=instant), instant_id, {})
+            instant_link = "https://t.me/iv?url={}/&rhash={}".format(self.link, instant[2]) if instant[2] else self.link
+            tg.send(self.create(5, instant=(instant_link, instant[1])), instant_id, {})
         if msg_id:
             db.update_message_id(self.__id, msg_id)
