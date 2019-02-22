@@ -222,7 +222,11 @@ class Article:
             msg_id = tg.send(text, channel_id, buttons)
         if instant and instant[0]:
             instant_id = instant[0] if not config.debug else config.owner
-            instant_link = "https://t.me/iv?url={}/&rhash={}".format(self.link, instant[2]) if instant[2] else self.link
+            instant_link = (
+                "https://t.me/iv?url={}/&rhash={}".format(self.link, instant[2])
+                if instant[2]
+                else self.link
+            )
             tg.send(self.create(5, instant=(instant_link, instant[1])), instant_id, {})
         if msg_id:
             db.update_message_id(self.__id, msg_id)

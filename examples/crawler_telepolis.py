@@ -44,7 +44,9 @@ def main():
         if site.check_article_exists(x["link"]):
             continue
         img, tags = get_img_and_tags(x["link"])
-        site.add_article(title=x["title"], link=x["link"], text=x["summary"], tags=tags, img=img)
+        site.add_article(
+            title=x["title"], link=x["link"], text=x["summary"], tags=tags, img=img
+        )
     site.post()
 
 

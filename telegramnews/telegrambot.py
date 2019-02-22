@@ -38,7 +38,6 @@ class Telegram:
 
     def send_img(self, msg, channel_id, keyboard, img):
         try:
-
             msg_id = self.__bot.send_photo(
                 caption=msg,
                 photo=img if img[:4] == "http" else open(img, "rb"),
@@ -46,7 +45,7 @@ class Telegram:
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=self.__get_keyboard(keyboard),
                 timeout=60,
-            )
+            )["message_id"]
         except Exception as e:
             logging.exception(e)
             msg_id = 0

@@ -33,7 +33,10 @@ def get_newspaper(site, week=0):
     url = base_url.format(week.year, week.isocalendar()[1])
     if site.check_article_exists(url):
         return []
-    pdf = "downloads/olbrueck_{}-{}.pdf".format(week.year, week.isocalendar()[1])
+    pdf = os.path.join(
+        os.path.dirname(__file__),
+        "downloads/olbrueck_{}-{}.pdf".format(week.year, week.isocalendar()[1]),
+    )
     response = requests.head(url)
     if "status" in response.headers and response.headers["status"] == "404 Not found":
         return []
@@ -49,7 +52,7 @@ def main():
     site.alias = "Olbrück Rundschau"
     site.base_url = "https://archiv.wittich.de/epapers/pdf/3"
     site.short = "olbrück"
-    site.channel_id = -1001128692603
+    site.channel_id = -1001199332289
 
     for i in range(10):
         result = get_newspaper(site, week=(i - 5) * -1)

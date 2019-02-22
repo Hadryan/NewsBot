@@ -5,14 +5,7 @@ from . import database, news
 
 
 class Site:
-    def __init__(
-        self,
-        name="",
-        alias="",
-        short="",
-        base_url="",
-        channel_id=0,
-    ):
+    def __init__(self, name="", alias="", short="", base_url="", channel_id=0):
         self.__name = name
         self.__alias = alias
         self.__short = short
@@ -88,7 +81,6 @@ class Site:
     def join_instant(self, join_instant):
         self.__join_instant = join_instant
         self.check_site()
-
 
     @property
     def instant_hash(self):
