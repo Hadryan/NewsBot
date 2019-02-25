@@ -75,11 +75,13 @@ class Article:
 
     @text.setter
     def text(self, text):
+        if not text:
+            return
         text = html.unescape(text)
         text = text.replace("_", "\_").replace("*", "\*").replace("`", "\`")
         text = self.__check(text)
         text = re.sub("<.*>", "", text)
-        self.__text = re.findall("^ *(.*) *$", text)[0]
+        self.__text = re.findall("^ *(.*) *$", text, re.DOTALL)[0]
 
     @property
     def link(self):

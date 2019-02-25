@@ -26,7 +26,7 @@ def get_img_and_tags(link):
     img = re.findall('property="og:image" *content="([^"]+)"', source)
     tags = re.findall("var tags = '([^']+)'", source)
     img = img[0] if img else ""
-    tags = shlex.split(tags[0].replace("|", " "))
+    tags = shlex.split(tags[0].replace("|", " ")) if tags else ""
     return img, tags
 
 
