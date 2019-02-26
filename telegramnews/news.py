@@ -20,16 +20,16 @@ TIMEZONE = "Europe/Berlin"
 
 class Article:
     def __init__(
-        self,
-        site,
-        short="",
-        title="",
-        alias="",
-        text="",
-        link="",
-        img="",
-        date="",
-        tags="",
+            self,
+            site,
+            short="",
+            title="",
+            alias="",
+            text="",
+            link="",
+            img="",
+            date="",
+            tags="",
     ):
         self.__site = site
         self.__short = short
@@ -54,7 +54,8 @@ class Article:
     @title.setter
     def title(self, title):
         title = html.unescape(title)
-        self.__title = self.__check(title)
+        title = self.__check(title)
+        self.__title = title.replace("*", "")
 
     @property
     def text(self):
@@ -66,10 +67,10 @@ class Article:
             else:
                 dot = len(self.__text)
             return (
-                "{}[.]({}){}".format(
-                    self.__text[:dot], self.__img, self.__text[dot + 1 :]
-                )
-                + "\n\n"
+                    "{}[.]({}){}".format(
+                        self.__text[:dot], self.__img, self.__text[dot + 1:]
+                    )
+                    + "\n\n"
             )
         return self.__text + "\n\n"
 
@@ -102,10 +103,10 @@ class Article:
     @property
     def date(self):
         return (
-            pytz.utc.localize(datetime.strptime(self.__date, "%Y-%m-%d %H:%M:%S"))
-            .astimezone(pytz.timezone(TIMEZONE))
-            .strftime("Artikel vom %d.%m.%Y um %H:%M Uhr")
-            + "\n"
+                pytz.utc.localize(datetime.strptime(self.__date, "%Y-%m-%d %H:%M:%S"))
+                .astimezone(pytz.timezone(TIMEZONE))
+                .strftime("Artikel vom %d.%m.%Y um %H:%M Uhr")
+                + "\n"
         )
 
     @date.setter
