@@ -34,8 +34,9 @@ def main():
         if site.check_article_exists(x["link"]):
             continue
         img, tags = get_img_and_tags(x["link"])
+        text = x["summary"] if 'summary' in x else ''
         site.add_article(
-            text=x["summary"], title=x["title"], link=x["link"], tags=tags, img=img
+            text=text, title=x["title"], link=x["link"], tags=tags, img=img
         )
     site.post()
 
