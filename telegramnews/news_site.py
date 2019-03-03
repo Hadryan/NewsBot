@@ -1,4 +1,5 @@
 import re
+import time
 
 from telegramnews.database import Database
 from . import database, news
@@ -132,6 +133,8 @@ class Site:
 
     def post(self, variant=0, share_link=2):
         for article in self.__articles[::-1]:
+            if len(self.__articles) > 10:
+                time.sleep(2)
             article.send(
                 self.__db,
                 self.channel_id,
