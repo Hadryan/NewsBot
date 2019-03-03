@@ -40,8 +40,8 @@ def main():
 
 def create_hashtag(text):
     text_list = re.split("[.:]", text, maxsplit=1)
-    tags = re.split("[\/-]", text_list[0])
-    tags = ["#" + tag.replace(" ", "") for tag in tags]
+    tags = re.split("[/-]", text_list[0])
+    tags = [tag.replace(" ", "") for tag in tags]
     new_text = text_list[1]
     for tag in tags:
         if len(tag) > 15:

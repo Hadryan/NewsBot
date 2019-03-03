@@ -117,7 +117,7 @@ class Article:
     def tags(self):
         if self.__tags:
             if self.__variant == 3:
-                return "\n#{}".format(" #".join(self.__tags))
+                return "\n#{} ".format(" #".join(self.__tags))
             return "#{}\n\n".format(" #".join(self.__tags))
         return "\n"
 
